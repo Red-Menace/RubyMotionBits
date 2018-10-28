@@ -135,7 +135,7 @@ class MEalert
    TEXT_HEIGHT = 22  # textfield height
    COMBO_HEIGHT = 28 # combobox height - the compiler complains, but only a couple larger
    CHECK_HEIGHT = 25 # checkbox button height
-   PADDING = 10       # padding between checkboxes
+   PADDING = 10      # padding between checkboxes
    RESOURCES = '/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/'
    
    # websafe colors and their inverses

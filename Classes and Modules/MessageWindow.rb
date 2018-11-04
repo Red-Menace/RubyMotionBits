@@ -1,7 +1,7 @@
 #
 #  MessageWindow.rb
 #
-#  Created by Red_Menace on 03-19-14, last updated/reviewed on 09-27-18
+#  Created by Red_Menace on 03-19-14, last updated/reviewed on 11-03-18
 #  Copyright (c) 2014-2018 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 #  All rights reserved.
 #
@@ -307,6 +307,7 @@ class MessageWindow < NSWindowController
       [createImageView, createLabel, createTextView].each do |view|
          self.window.contentView.addSubview(view) if view
       end
+      self.window.makeFirstResponder @spinner  # get focus off the imageView
       @setup = true
    rescue => error
       @setup = false
@@ -365,6 +366,7 @@ class MessageWindow < NSWindowController
       @imageView = NSImageView.alloc.initWithFrame(IMAGE_FRAME).tap do |obj|
          obj.autoresizingMask = NSViewMinYMargin
          obj.imageScaling = NSScaleToFit  # NSScaleProportionally
+         obj.editable = true
       end
    end
    

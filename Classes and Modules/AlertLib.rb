@@ -1,13 +1,13 @@
 #
 # AlertLib - a library for creating NSAlert modal dialogs
 #
-# Created by Red_Menace on 07-22-17, last updated/reviewed on 10-26-18
+# Created by Red_Menace on 07-22-17, last updated/reviewed on 12-02-18
 # Copyright (c) 2017-2018 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 #    list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
@@ -80,7 +80,7 @@
 #     sheet(flag)                   # set the alert to be shown as a sheet
 #
 #     accessory(accessoryType)      # accessoryView type
-#     input(item)                   # input item(s) for the accessoryView 
+#     input(item)                   # input item(s) for the accessoryView
 #     textColor(colorName, target)  # text color for the textField or label fields
 #     backgroundColor(colorName, target)  # background color for the textField or window
 #     placeholder(placeholderText)  # placeholder text
@@ -150,7 +150,7 @@ class MEalert
               'gray' => [0.5, 0.5, 0.5],       'custom' => [0.5, 0.5, 0.5],
               'maroon' => [0.5, 0.0, 0.0],     'lightCyan' => [0.5, 1.0, 1.0],
               'purple' => [0.5, 0.0, 0.5],     'lightGreen' => [0.5, 1.0, 0.5],
-              'olive' => [0.5, 0.5, 0.0],      'lightBlue' => [0.5, 0.5, 1.0]}
+              'olive' => [0.5, 0.5, 0.0],      'lightBlue' => [0.5, 0.5, 1.0] }
 
 
    ##################################################
@@ -217,14 +217,14 @@ class MEalert
       end if @accessory
       { button: response, reply: response == 'Cancel' ? nil : answer }
    end
-   alias_method :show, :display
+   alias show display
    
    
    # (re)set the alert window title
    def title(titleText)
       @alert.window.title = titleText.to_s
    end
-   alias_method :title=, :title
+   alias title= title
 
 
    # (re)set the alert's message text and font
@@ -235,7 +235,7 @@ class MEalert
       @alert.window.contentView.subviews[4].font = messageFont unless messageFont.nil?
       @alert.messageText = messageText.to_s
    end
-   alias_method :message=, :message
+   alias message= message
 
 
    # (re)set the alert's informative text and font
@@ -244,7 +244,7 @@ class MEalert
       @alert.window.contentView.subviews[5].font = infoFont unless infoFont.nil?
       @alert.informativeText = infoText.to_s unless infoText.nil?
    end
-   alias_method :info=, :info
+   alias info= info
 
 
    # (re)set the alert icon
@@ -265,7 +265,7 @@ class MEalert
       end
       @alert.icon = NSImage.alloc.initByReferencingFile(theFile) unless theFile.nil?
    end
-   alias_method :icon=, :icon
+   alias icon= icon
 
 
    # Specify an array of buttons, subject to display size.
@@ -282,25 +282,25 @@ class MEalert
             theButton.keyEquivalent = '' unless aButton == 'Cancel'
             theButton.keyEquivalent = "\r" if default == @buttonList.count - 1
          end
-      end      
+      end
       @alert.window.initialFirstResponder = theButton unless @buttonList.empty?  # last one
       @buttonList
    end
-   alias_method :buttons=, :buttons
+   alias buttons= buttons
 
 
    # (re)set the alert dialog give-up time delay (seconds)
    def giveUp(timeDelay)
-      @delayTime = (timeDelay.to_f).abs
+      @delayTime = timeDelay.to_f.abs
    end
-   alias_method :giveUp=, :giveUp
+   alias giveUp= giveUp
 
 
    # (re)set the alert to show as a sheet over the front window
    def sheet(flag)
       @sheet = (flag == true)
    end
-   alias_method :sheet=, :sheet
+   alias sheet= sheet
    
    
    ##################################################
@@ -312,7 +312,7 @@ class MEalert
    def accessory(type)
       @accessoryType = type.to_s.downcase unless type.nil?
    end
-   alias_method :accessory=, :accessory
+   alias accessory= accessory
    
    
    # (re)set the accessory default input items or text
@@ -320,7 +320,7 @@ class MEalert
    def input(inputItem)
       @input = inputItem
    end
-   alias_method :input=, :input
+   alias input= input
 
 
    # (re)set the text color to one of the preset names
@@ -335,7 +335,7 @@ class MEalert
       else @coloration[:text] = theColor
       end
    end
-   alias_method :textColor=, :textColor
+   alias textColor= textColor
 
 
    # (re)set the background color to one of the preset names
@@ -347,23 +347,23 @@ class MEalert
          @alert.window.backgroundColor = MEalert.getColor(theColor, 'windowBackground')
       else  # set the color name for the accessory textField
          @coloration[:background] = theColor
-      end                       
-    end
-   alias_method :backgroundColor=, :backgroundColor
+      end
+   end
+   alias backgroundColor= backgroundColor
 
 
    # (re)set the placeholder text
    def placeholder(placeholderText)
       @placeholder = placeholderText.to_s unless placeholderText.nil?
    end
-   alias_method :placeholder=, :placeholder
+   alias placeholder= placeholder
 
 
    # Set the textField (if used) to be secure (obscured characters).
    def secure(flag)
       @secure = (flag == true)
    end
-   alias_method :secure=, :secure
+   alias secure= secure
 
 
    # Set the accessory border style.
@@ -371,7 +371,7 @@ class MEalert
    def border(borderStyle)
       @border = borderStyle.to_s.downcase unless borderStyle.nil?
    end
-   alias_method :border=, :border
+   alias border= border
 
 
    # Set the width of the accessory, subject to the alert size or MAX_WIDTH.
@@ -379,7 +379,7 @@ class MEalert
       return if accessoryWidth.nil?
       @dimensions[:width] = [accessoryWidth.to_f, MIN_WIDTH, MAX_WIDTH].sort[1]
    end
-   alias_method :width=, :width
+   alias width= width
 
 
    # Set the height of the textField accessory, subject to MIN_HEIGHT or MAX_HEIGHT.
@@ -387,7 +387,7 @@ class MEalert
       return if accessoryHeight.nil?
       @dimensions[:height] = [accessoryHeight.to_f, MIN_HEIGHT, MAX_HEIGHT].sort[1]
    end
-   alias_method :height=, :height
+   alias height= height
 
 
    ##################################################
@@ -520,7 +520,7 @@ class MEalert
          combo.placeholderString = @placeholder
       end
       setBorder
-      @alert.accessoryView = @accessory       
+      @alert.accessoryView = @accessory
    end
       
    
@@ -543,9 +543,7 @@ class MEalert
                     .tap do |check|
                check.buttonType = NSSwitchButton
                check.cell.lineBreakMode = 5  # NSLineBreakByTruncatingMiddle
-               if item.end_with?("\n")  # check checkbox
-                  check.state, item = NSOnState, item.chomp
-               end
+               check.state, item = NSOnState, item.chomp if item.end_with?("\n")  # check checkbox
                check.title = item
                if @dimensions[:width].nil?
                   check.sizeToFit  # use full width only when auto-sizing
@@ -557,7 +555,7 @@ class MEalert
          box.frameSize = [checkWidth + 10, height + PADDING]  # adjust box for contents
       end
       setBorder
-      @alert.accessoryView = @accessory       
+      @alert.accessoryView = @accessory
    end
    
    

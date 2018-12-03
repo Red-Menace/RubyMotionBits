@@ -1,7 +1,7 @@
 #
 #  MessageWindow.rb
 #
-#  Created by Red_Menace on 03-19-14, last updated/reviewed on 11-03-18
+#  Created by Red_Menace on 03-19-14, last updated/reviewed on 12-03-18
 #  Copyright (c) 2014-2018 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 #  All rights reserved.
 #
@@ -76,19 +76,19 @@ class MessageWindow < NSWindowController
    ##################################################
    # #mark ―――― CONSTANTS ――――
    ##################################################
-   
+
    WINDOW_RECT = [[400, 600], [621, 461]]  # main window location and size (~ 80 x 24)
    WINDOW_MIN_SIZE =          [335, 250]   # minimum window size (~ 40 x 10)
    IMAGE_FRAME = [[20, 393], [48, 48]]     # icon imageView frame
    LABEL_FRAME = [[80, 393], [524, 48]]    # label frame when using an icon image
    LABEL_OFFSET = 60                       # label offset when not using icon
    TEXTVIEW_FRAME = [[20, 20], [581, 353]] # also used for the scroll view
-   
+
 
    ##################################################
    # #mark ―――― Attributes ――――
    ##################################################
-   
+
    # 'window' is already defined by the controller
    attr_reader :labelField    # the label text field
    attr_reader :imageView     # for a small icon image
@@ -110,16 +110,16 @@ class MessageWindow < NSWindowController
       @wrapping = false
       initWithWindow(nil)
    end
-   
-   
+
+
    # create a message window with a wrapping text view
    #  MessageWindowController.alloc.initWithWrapping  #=> windowController
    def initWithWrapping
       @wrapping = true
       initWithWindow(nil)
    end
-   
-   
+
+
    # base NSWindowController initialization
    def initWithWindow(window)
       super
@@ -130,8 +130,8 @@ class MessageWindow < NSWindowController
       setIcon('default') # default icon for basic window
       self
    end
-   
-   
+
+
    ##################################################
    # #mark  ―――― Instance Methods ――――
    ##################################################
@@ -154,12 +154,12 @@ class MessageWindow < NSWindowController
       end
       @labelField.stringValue = options[:labelText].to_s unless options[:labelText].nil?
       true  # success
-   rescue => error
+   rescue StandardError => error
       p "Error in MessageWindow's setup method: " + error.message
       false
    end
-   
-   
+
+
    # (re)set the title of the message window
    # A title text of 'default' will use the application name.
    # Returns the new window title.
@@ -170,7 +170,7 @@ class MessageWindow < NSWindowController
       @title = self.window.title
    end
 
-   alias_method :title=, :setTitle
+   alias title= setTitle
 
 
    # (re)set the message icon to an NSImage or the contents of a file
@@ -200,7 +200,7 @@ class MessageWindow < NSWindowController
       @iconPath = iconFilePath
    end
 
-   alias_method :icon=, :setIcon
+   alias icon= setIcon
 
 
    # (re)set the contents of the message label textField
@@ -209,7 +209,7 @@ class MessageWindow < NSWindowController
       @labelField.stringValue = labelText.to_s
    end
 
-   alias_method :label=, :setLabel
+   alias label= setLabel
 
 
    # (re)set the contents of the message textView
@@ -227,7 +227,7 @@ class MessageWindow < NSWindowController
       end
    end
 
-   alias_method :message=, :setMessage
+   alias message= setMessage
 
 
    # add text to the message textView, using default parameters as needed
@@ -243,7 +243,7 @@ class MessageWindow < NSWindowController
       if someText.class.to_s.end_with?('AttributedString')
          unless someIndex.abs > @textView.attributedString.length || someText == ''  # nothing to add
             someIndex = @textView.attributedString.length + someIndex + 1 if someIndex < 0
-            scrollFlag = %w(true yes 1).include?(options[:scroll].to_s.downcase)
+            scrollFlag = %w[true yes 1].include?(options[:scroll].to_s.downcase)
             @textView.replaceCharactersInRange([someIndex, 0], withAttributedString: someText)
             @textView.scrollRangeToVisible [someIndex, someText.length] if scrollFlag
          end
@@ -251,7 +251,7 @@ class MessageWindow < NSWindowController
       else  # regular string
          unless someIndex.abs > @textView.string.length || someText == ''  # nothing to add
             someIndex = @textView.string.length + someIndex + 1 if someIndex < 0
-            scrollFlag = %w(true yes 1).include?(options[:scroll].to_s.downcase)
+            scrollFlag = %w[true yes 1].include?(options[:scroll].to_s.downcase)
             @textView.replaceCharactersInRange([someIndex, 0], withString: someText)
             @textView.scrollRangeToVisible [someIndex, someText.length] if scrollFlag
          end
@@ -265,7 +265,7 @@ class MessageWindow < NSWindowController
       switch(flag) ? @spinner.startAnimation(self) : @spinner.stopAnimation(self)
    end
 
-   alias_method :spinner=, :setSpinner
+   alias spinner= setSpinner
 
 
    ##################################################
@@ -277,7 +277,7 @@ class MessageWindow < NSWindowController
    # check for 'empty' or default parameter
    # Returns nil for a false-ish value, the block if 'default', otherwise the value.
    def checkParameter(value)
-      if %W('' none false #{nil} null 0).include?(value.to_s.downcase)
+      if %W['' none false #{nil} null 0].include?(value.to_s.downcase)
          nil
       elsif value.to_s.downcase == 'default'
          block_given? ? yield : value
@@ -309,7 +309,7 @@ class MessageWindow < NSWindowController
       end
       self.window.makeFirstResponder @spinner  # get focus off the imageView
       @setup = true
-   rescue => error
+   rescue StandardError => error
       @setup = false
       errorString = "Error in MessageWindow's createMessageWindow method: "
       if error.class == NSException
@@ -339,8 +339,8 @@ class MessageWindow < NSWindowController
       self.window.allowsConcurrentViewDrawing = true
       self.window.hasShadow = true
    end
-   
-   
+
+
    # Returns a title bar accessory view containing a spinning progress indicator.
    def createTitlebar
       height = NSHeight(self.window.frame) - NSHeight(self.window.contentView.frame)
@@ -359,8 +359,8 @@ class MessageWindow < NSWindowController
          obj.layoutAttribute = NSLayoutAttributeRight
       end
    end
-   
-   
+
+
    # Returns the imageView object for addition to the window content.
    def createImageView
       @imageView = NSImageView.alloc.initWithFrame(IMAGE_FRAME).tap do |obj|
@@ -369,8 +369,8 @@ class MessageWindow < NSWindowController
          obj.editable = true
       end
    end
-   
-   
+
+
    # Returns the label object for addition to the window content.
    def createLabel
       @labelField = NSTextField.alloc.initWithFrame(LABEL_FRAME).tap do |obj|
@@ -385,8 +385,8 @@ class MessageWindow < NSWindowController
          obj.cell.lineBreakMode = NSLineBreakByWordWrapping  # NSLineBreakByCharWrapping
       end
    end
-   
-   
+
+
    # adjust the label frame for an icon - +offset applied to origin, -offset to width
    # Returns the new frame.
    def adjustFrame(offset)
@@ -395,8 +395,8 @@ class MessageWindow < NSWindowController
       currentFrame[1][0] -= offset  # opposite for width
       @labelField.frame = currentFrame
    end
-   
-   
+
+
    # Returns the textView/scrollView object for addition to the window content.
    def createTextView
       @textView = NSTextView.alloc.initWithFrame TEXTVIEW_FRAME

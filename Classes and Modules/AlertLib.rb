@@ -1,7 +1,7 @@
 #
 # AlertLib - a library for creating NSAlert modal dialogs
 #
-# Created by Red_Menace on 07-22-17, last updated/reviewed on 12-02-18
+# Created by Red_Menace on 07-22-17, last updated/reviewed on 12-18-18
 # Copyright (c) 2017-2018 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 # All rights reserved.
 #
@@ -25,11 +25,12 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
+#
 # Thought I might try my hand at a little metaprogramming, in this case a library for
 # NSAlert modal dialogs.  A standard dialog can be created and enhanced (accessoryViews,
 # fonts, colors, etc) by using method names in a block with Class#new.
 #
-# An accessoryView is only created if there is an input, and can be a comboBox or
+# An accessoryView is only created if there is an input, and can be a comboBox, radio or
 # checkBoxes (for input), or a textField (for input/output).  Fonts for the default label
 # fields can also be changed, and the alert message label can be hidden (more-or-less).
 #
@@ -38,12 +39,17 @@
 # there are no scroll bars - scrolling can be done with the arrow keys if needed.
 #
 # If a specific size isn't declared, the textField will try to auto-size its width to
-# the dialog width and its height to contain the text, and the comboBox/checkBox will
-# auto-size its width to the longest string in the input list.
+# the dialog width and its height to contain the text, and the others will auto-size
+# their widths to the longest string in the input list (their heights are sized for a
+# normal single line).
 #
 # TextField contents can be changed for re-displaying an existing alert, but most
 # of the alert interface items (buttons, accessoryView, etc), including the original
 # size of the textFields, can't be changed after the alert has been created.
+#
+# The checkbox and radio accessoryViews are identical except for the way the buttons
+# operate, and radio will only let one button be set.
+# Hash#select for value == 1 can be used to get the selection(s).
 #
 # NOTE:  No checks are done to ensure the dialog fits in the dislay, so constraints can
 #        be blown out if auto-sizing the width, using more buttons (there isn't a limit),
@@ -53,7 +59,7 @@
 # of a hash of the button pressed and the accessoryView values (if any), for example:
 #        { button: "Whatever", reply: nil }  # no accessory (or Cancel button)
 #        { button: "OK", reply: "This is a test." }  # textField and comboBox
-#        { button: "OK", reply: {"checkBox 1": 1, "checkBox 2": 0} }  # checkBox
+#        { button: "OK", reply: {"checkBox 1": 1, "checkBox 2": 0} }  # checkBox and radio
 #
 #
 # Typical usage:
@@ -134,23 +140,23 @@ class MEalert
    INSET = 125       # accessory view inset
    TEXT_HEIGHT = 22  # textfield height
    COMBO_HEIGHT = 28 # combobox height - the compiler complains, but only a couple larger
-   CHECK_HEIGHT = 25 # checkbox button height
-   PADDING = 10      # padding between checkboxes
+   CHECK_HEIGHT = 26 # checkbox button height
+   PADDING = 11      # padding around checkboxes
    RESOURCES = '/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/'
    
    # websafe colors and their inverses
-   COLORS = { 'black' => [0.0, 0.0, 0.0],      'white' => [1.0, 1.0, 1.0],
-              'blue' => [0.0, 0.0, 1.0],       'yellow' => [1.0, 1.0, 0.0],
-              'lime' => [0.0, 1.0, 0.0],       'magenta' => [1.0, 0.0, 1.0],
-              'aqua' => [0.0, 1.0, 1.0],       'red' => [1.0, 0.0, 0.0],
-              'navy' => [0.0, 0.0, 0.5],       'lightYellow' => [1.0, 1.0, 0.5],
-              'green' => [0.0, 0.5, 0.0],      'lightMagenta' => [1.0, 0.5, 1.0],
-              'teal' => [0.0, 0.5, 0.5],       'lightRed' => [1.0, 0.5, 0.5],
-              'silver' => [0.75, 0.75, 0.75],  'darkGray' => [0.25, 0.25, 0.25],
-              'gray' => [0.5, 0.5, 0.5],       'custom' => [0.5, 0.5, 0.5],
-              'maroon' => [0.5, 0.0, 0.0],     'lightCyan' => [0.5, 1.0, 1.0],
-              'purple' => [0.5, 0.0, 0.5],     'lightGreen' => [0.5, 1.0, 0.5],
-              'olive' => [0.5, 0.5, 0.0],      'lightBlue' => [0.5, 0.5, 1.0] }
+   COLORS = { 'black' =>  [0.0, 0.0, 0.0],     'white' =>        [1.0, 1.0, 1.0],
+              'blue' =>   [0.0, 0.0, 1.0],     'yellow' =>       [1.0, 1.0, 0.0],
+              'lime' =>   [0.0, 1.0, 0.0],     'magenta' =>      [1.0, 0.0, 1.0],
+              'aqua' =>   [0.0, 1.0, 1.0],     'red' =>          [1.0, 0.0, 0.0],
+              'navy' =>   [0.0, 0.0, 0.5],     'lightYellow' =>  [1.0, 1.0, 0.5],
+              'green' =>  [0.0, 0.5, 0.0],     'lightMagenta' => [1.0, 0.5, 1.0],
+              'teal' =>   [0.0, 0.5, 0.5],     'lightRed' =>     [1.0, 0.5, 0.5],
+              'silver' => [0.75, 0.75, 0.75],  'darkGray' =>     [0.25, 0.25, 0.25],
+              'gray' =>   [0.5, 0.5, 0.5],     'custom' =>       [0.5, 0.5, 0.5],  # whatever
+              'maroon' => [0.5, 0.0, 0.0],     'lightCyan' =>    [0.5, 1.0, 1.0],
+              'purple' => [0.5, 0.0, 0.5],     'lightGreen' =>   [0.5, 1.0, 0.5],
+              'olive' =>  [0.5, 0.5, 0.0],     'lightBlue' =>    [0.5, 0.5, 1.0] }
 
 
    ##################################################
@@ -189,7 +195,7 @@ class MEalert
          NSColor.colorWithSRGBRed( rgb[0],
                             green: rgb[1],
                              blue: rgb[2],
-                            alpha: 1.0) unless rgb.nil?
+                            alpha: 1.0) unless rgb.nil?  # no default?
       end
 
    end
@@ -200,18 +206,18 @@ class MEalert
    ##################################################
 
    # Show/display the alert using the current settings.
-   # Returns a hash: { button=>(title), reply=>(accessoryView contents or nil if Cancel) }
+   # Returns a hash: { button=>(title), reply=>(accessoryView contents, or nil if Cancel) }
    def display
       buttons(['OK']) if @buttonList == []
       makeAccessory unless @accessory
       updateAccessory if @accessory && @accessoryType == 'textfield'
       timer, answer = setTimer, nil
-      response = buttonPressed
+      response = buttonPressed()
       timer.invalidate unless timer.nil?
       case @accessoryType
       when 'textfield', 'combobox'
          answer = @accessory.stringValue.to_s  # handle nil
-      when 'checkbox'
+      when 'checkbox', 'radio'
          answer = {}
          @accessory.contentView.subviews.each { |item| answer[item.title] = item.state }
       end if @accessory
@@ -228,7 +234,7 @@ class MEalert
 
 
    # (re)set the alert's message text and font
-   # Note that this textField cannot be nil, but if the messageText is nil anyway, then
+   # Note that this textField cannot be nil, but if messageText is nil, then
    # setting the font to a very small size (such as 0.25) hides it fairly well.
    def message(messageText, messageFont = nil)
       messageFont = NSFont.boldSystemFontOfSize(0.25) if messageText.nil?
@@ -239,7 +245,7 @@ class MEalert
 
 
    # (re)set the alert's informative text and font
-   # The informative textField is not created if it isn't set.
+   # The informative textField doesn't take any space if it isn't set.
    def info(infoText, infoFont = nil)
       @alert.window.contentView.subviews[5].font = infoFont unless infoFont.nil?
       @alert.informativeText = infoText.to_s unless infoText.nil?
@@ -250,6 +256,7 @@ class MEalert
    # (re)set the alert icon
    # Can be the styles 'informational', 'warning', 'critical', the system alert icons
    # 'note', 'caution', 'stop', system icons 'question', 'tools', or an image file path.
+   # Space is not reclaimed if no icon is used.
    def icon(iconType)
       case type = iconType.to_s.downcase
       when 'critical'
@@ -268,13 +275,13 @@ class MEalert
    alias icon= icon
 
 
-   # Specify an array of buttons, subject to display size.
+   # Specify an array of buttons (left-to-right), subject to display size.
    # The parameter 'default' specifies the default button (index).
    # The leftmost button (usually 'Cancel') will have the initial focus.
    def buttons(buttonArray, default = true)
       return if (buttonArray = filterList(buttonArray)).empty? || !@buttonList.empty?
       theButton = nil
-      Array(buttonArray).reverse.each do |aButton|
+      Array(buttonArray).reverse.each do |aButton|  # buttons added right-to-left
          aButton = aButton.to_s
          theButton = @alert.addButtonWithTitle(aButton)
          @buttonList << aButton
@@ -308,9 +315,9 @@ class MEalert
    ##################################################
 
    # set the type of the accessory view
-   # Can be 'textField', 'comboBox', or 'checkBox'.
+   # Valid types are 'textfield', 'combobox', 'checkbox', or 'radio'.
    def accessory(type)
-      @accessoryType = type.to_s.downcase unless type.nil?
+      @accessoryType = type.nil? ? nil : type.to_s.downcase
    end
    alias accessory= accessory
    
@@ -354,12 +361,12 @@ class MEalert
 
    # (re)set the placeholder text
    def placeholder(placeholderText)
-      @placeholder = placeholderText.to_s unless placeholderText.nil?
+      @placeholder = placeholderText.nil? ? nil : placeholderText.to_s
    end
    alias placeholder= placeholder
 
 
-   # Set the textField (if used) to be secure (obscured characters).
+   # Set the textField to be secure (obscured characters).
    def secure(flag)
       @secure = (flag == true)
    end
@@ -369,7 +376,7 @@ class MEalert
    # Set the accessory border style.
    # Can be 'line' or 'none', otherwise the default is used.
    def border(borderStyle)
-      @border = borderStyle.to_s.downcase unless borderStyle.nil?
+      @border = borderStyle.nil? ? nil : borderStyle.to_s.downcase
    end
    alias border= border
 
@@ -399,6 +406,7 @@ class MEalert
    # Log if option not found - misspelling, etc.
    def method_missing(symbol, *args, &block)
       NSLog(format('MEalert: %s method not found', symbol))
+      super
    end
 
 
@@ -440,10 +448,14 @@ class MEalert
    
    
    # Filter a list for blanks and duplicates.
-   # The filter ignores a trailing newline, so the first match wins.
+   # Trailing newlines (indicating set/checked) are chomped for combobox items, chomped
+   # after the first one for radio items, and ignored when matching checkbox items.
    def filterList(input)
+      set = false
       Array(input).each_with_object(Array.new) do |item, output|
         item = item.to_s
+        item = item.chomp if (@accessoryType == 'combobox') || (@accessoryType == 'radio' && set)
+        set = true if item.end_with?("\n")
         output << item unless item.empty? || (output & [item, "#{item}\n"]).any?
       end
    end
@@ -462,7 +474,8 @@ class MEalert
       case @accessoryType
       when 'textfield' then makeTextFieldAccessory(width, MAX_HEIGHT)
       when 'combobox' then makeComboBoxAccessory(width, COMBO_HEIGHT)
-      when 'checkbox' then makeCheckBoxAccessory(width, MAX_HEIGHT)
+      when 'checkbox' then makeCheckBoxAccessory(width, MAX_HEIGHT, false)
+      when 'radio' then makeCheckBoxAccessory(width, MAX_HEIGHT, true)
       end
    end
    
@@ -476,7 +489,7 @@ class MEalert
                             .alloc
                             .initWithFrame([[0, 0], [width, height]])
                             .tap do |text|
-         text.font = NSFont.fontWithName('Menlo', size: 13)
+         text.font = NSFont.fontWithName('Menlo', size: 13)  # monospaced
       end
       updateAccessory
       @accessory.frameSize = @accessory.cell
@@ -511,7 +524,7 @@ class MEalert
             combo.addItemWithObjectValue(item)
             if @dimensions[:width].nil?
                combo.stringValue = item
-               combo.sizeToFit  # hacky way to get max width when auto-sizing
+               combo.sizeToFit  # kludge to get max width when auto-sizing
                comboWidth = combo.frame.size.width if combo.frame.size.width > comboWidth
             end
          end
@@ -524,26 +537,26 @@ class MEalert
    end
       
    
-   # Make a checkBox accessoryView - the width will use the specified setting or
-   # auto-adjust for the longest input item (the width will not be smaller than the
+   # Make a checkBox or radio accessoryView - the width will use the specified setting
+   # or auto-adjust for the longest input item (the width will not be smaller than the
    # dialog width), and the height will always auto-adjust for the number of items.
-   # Input items ending with a newline will be set to checked (button title is chomped).
-   def makeCheckBoxAccessory(width, height)
+   # Input items ending with a newline will be set/checked (button title is chomped).
+   def makeCheckBoxAccessory(width, height, radio = false)
       return if (checkList = filterList(@input)).empty?
       height = checkList.length * CHECK_HEIGHT
       @accessory = NSBox.alloc
                         .initWithFrame([[0, 0], [width, height + PADDING]])
                         .tap do |box|
-         box.titlePosition = 0
-         checkWidth = width
+         box.titlePosition, checkWidth = 0, width
          checkList.each_with_index do |item, index|
             NSButton.alloc
                     .initWithFrame([[0, height - (index + 1) * CHECK_HEIGHT],
                                     [width, MIN_HEIGHT]])
                     .tap do |check|
-               check.buttonType = NSSwitchButton
+               check.buttonType = radio ? NSRadioButton : NSSwitchButton
+               check.target, check.action = self, 'no_op:'
                check.cell.lineBreakMode = 5  # NSLineBreakByTruncatingMiddle
-               check.state, item = NSOnState, item.chomp if item.end_with?("\n")  # check checkbox
+               check.state, item = NSOnState, item.chomp if item.end_with?("\n")  # set/check
                check.title = item
                if @dimensions[:width].nil?
                   check.sizeToFit  # use full width only when auto-sizing
@@ -557,6 +570,10 @@ class MEalert
       setBorder
       @alert.accessoryView = @accessory
    end
+   
+   
+   # Dummy action method to group radio buttons.
+   def no_op(sender) end
    
    
    # Set the border style.
@@ -588,7 +605,7 @@ class MEalert
       @delayTime = 0       # a delay time for the give-up timer
       @buttonList = []     # this will be a list of button titles
       @accessory = nil     # this will be any accessory view
-      @accessoryType = 'textfield'  # textField, comboBox, or checkBox
+      @accessoryType = 'textfield' # can be textfield, combobox, checkbox, or radio
       @coloration = { text: nil, background: nil }  # accessory colors - nil will auto select
       @dimensions = { width: nil, height: nil }     # accessory sizes - nil will auto adjust
       @input = nil         # accessory view input item(s)

@@ -1,8 +1,8 @@
 #
 #  MessageWindow.rb
 #
-#  Created by Red_Menace on 03-19-14, last updated/reviewed on 12-03-18
-#  Copyright (c) 2014-2018 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
+#  Created by Red_Menace on 03-19-14, last updated/reviewed on 01-09-19
+#  Copyright (c) 2014-2019 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -69,6 +69,11 @@
 #     show the message window
 #     dismiss the window when completed
 #
+#
+# Terms to search for if localizing:
+#     "Error in MessageWindow's setup method: "
+#     "Error in MessageWindow's createMessageWindow method: "
+#
 
 
 class MessageWindow < NSWindowController
@@ -77,12 +82,14 @@ class MessageWindow < NSWindowController
    # #mark ―――― CONSTANTS ――――
    ##################################################
 
-   WINDOW_RECT = [[400, 600], [621, 461]]  # main window location and size (~ 80 x 24)
-   WINDOW_MIN_SIZE =          [335, 250]   # minimum window size (~ 40 x 10)
-   IMAGE_FRAME = [[20, 393], [48, 48]]     # icon imageView frame
-   LABEL_FRAME = [[80, 393], [524, 48]]    # label frame when using an icon image
-   LABEL_OFFSET = 60                       # label offset when not using icon
-   TEXTVIEW_FRAME = [[20, 20], [581, 353]] # also used for the scroll view
+   V_SHIFT = 0    # subview shift from standard height (+/- 250)
+   H_SHIFT = 0    # subview shift from standard width (+/- 300)
+   WINDOW_RECT = [[400, 600], [621 + H_SHIFT, 461 + V_SHIFT]]  # standard (~ 80 x 24)
+   WINDOW_MIN_SIZE =          [371, 181]                       # minimum (~ 45 x 5)
+   IMAGE_FRAME = [[20, 393 + V_SHIFT], [48, 48]]               # icon imageView
+   LABEL_FRAME = [[80, 393 + V_SHIFT], [524 + H_SHIFT, 48]]    # frame when using an icon
+   LABEL_OFFSET = 60                                           # offset when not using icon
+   TEXTVIEW_FRAME = [[20, 20], [581 + H_SHIFT, 353 + V_SHIFT]] # also for the scroll view
 
 
    ##################################################
@@ -262,7 +269,7 @@ class MessageWindow < NSWindowController
 
    # (re)set the animation of the progress indicator
    def setSpinner(flag)
-      switch(flag) ? @spinner.startAnimation(self) : @spinner.stopAnimation(self)
+      switch?(flag) ? @spinner.startAnimation(self) : @spinner.stopAnimation(self)
    end
 
    alias spinner= setSpinner
@@ -287,11 +294,11 @@ class MessageWindow < NSWindowController
    end
 
 
-   # check for true- or false-ish parameter
-   # returns true/false from switch settings (e.g. yes/no, on/off, etc) otherwise nil
-   def switch(value)
-      return true if %W[true on yes start begin 1].include?(value.to_s.downcase)
-      return false if %W[false off no stop end 0].include?(value.to_s.downcase)
+# Check for a match with switch values (yes/no, on/off, etc).
+# Returns true/false if argument matches a switch, otherwise nil.
+def switch?(parameter)
+      return true if %W[true on yes start begin 1].include?(parameter.to_s.downcase)
+      return false if %W[false off no stop end 0].include?(parameter.to_s.downcase)
       nil
    end
 

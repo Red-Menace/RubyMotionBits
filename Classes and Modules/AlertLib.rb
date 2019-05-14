@@ -1,8 +1,8 @@
 #
 # AlertLib - a library for creating NSAlert modal dialogs
 #
-# Created by Red_Menace on 07-22-17, last updated/reviewed on 12-18-18
-# Copyright (c) 2017-2018 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
+# Created by Red_Menace on 07-22-17, last updated/reviewed on 05-13-19
+# Copyright (c) 2017-2019 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -175,7 +175,7 @@ class MEalert
 
 
       # Get an NSColor color from a color name.
-      # Returns an NSColor (or nil if the names are not found).
+      # Returns an NSColor (or default/gray if the name is not found).
       # Default control colors used by the class are aliased to support dark mode.
       def getColor(theColor, default = 'gray')
          preset = Proc.new do |color|
@@ -192,10 +192,11 @@ class MEalert
          else  # get the specified color or default - no dark mode swaps are performed
             rgb = COLORS[preset.call(default)] if (rgb = COLORS[theColor]).nil?
          end
+         rgb = [0.5, 0.5, 0.5] if rgb.nil?
          NSColor.colorWithSRGBRed( rgb[0],
                             green: rgb[1],
                              blue: rgb[2],
-                            alpha: 1.0) unless rgb.nil?  # no default?
+                            alpha: 1.0)
       end
 
    end

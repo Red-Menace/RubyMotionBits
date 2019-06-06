@@ -1,7 +1,7 @@
 #
 #  MessageWindow.rb
 #
-#  Created by Red_Menace on 03-19-14, last updated/reviewed on 01-09-19
+#  Created by Red_Menace on 03-19-14, last updated/reviewed on 06-05-19
 #  Copyright (c) 2014-2019 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 #  All rights reserved.
 #
@@ -100,10 +100,8 @@ class MessageWindow < NSWindowController
    attr_reader :labelField    # the label text field
    attr_reader :imageView     # for a small icon image
    attr_reader :textView      # the main text view
-   attr_reader :scrollView    # contains the text view
    attr_reader :title         # the title of the message window
    attr_reader :iconPath      # path for the icon, if using contents of a file
-   attr_reader :spinner       # title bar progress indicator
    attr_accessor :userInfo    # miscellaneous controller information (file path, etc)
 
 
@@ -155,7 +153,7 @@ class MessageWindow < NSWindowController
       setTitle(options[:titleText]) unless options[:titleText].nil?
       setIcon(options[:icon]) unless options[:icon].nil?
       if options[:messageText].class.to_s.end_with?('AttributedString')
-         @textView.attributedString = options[:messageText] unless options[:messageText].nil?
+         @textView.textStorage.attributedString = options[:messageText] unless options[:messageText].nil?
       else  # regular string
          @textView.string = options[:messageText] unless options[:messageText].nil?
       end
@@ -238,7 +236,6 @@ class MessageWindow < NSWindowController
 
 
    # add text to the message textView, using default parameters as needed
-   # text can be an attributed string
    # Returns the new message textView contents.
    def addText(parameters = {})
       options = { text: '',         # the text to add
@@ -247,29 +244,20 @@ class MessageWindow < NSWindowController
                 }.merge(parameters)
       someIndex = options[:index].to_i
       someText = options[:text]
-      if someText.class.to_s.end_with?('AttributedString')
-         unless someIndex.abs > @textView.attributedString.length || someText == ''  # nothing to add
-            someIndex = @textView.attributedString.length + someIndex + 1 if someIndex < 0
-            scrollFlag = %w[true yes 1].include?(options[:scroll].to_s.downcase)
-            @textView.replaceCharactersInRange([someIndex, 0], withAttributedString: someText)
-            @textView.scrollRangeToVisible [someIndex, someText.length] if scrollFlag
-         end
-         @textView.attributedString
-      else  # regular string
-         unless someIndex.abs > @textView.string.length || someText == ''  # nothing to add
-            someIndex = @textView.string.length + someIndex + 1 if someIndex < 0
-            scrollFlag = %w[true yes 1].include?(options[:scroll].to_s.downcase)
-            @textView.replaceCharactersInRange([someIndex, 0], withString: someText)
-            @textView.scrollRangeToVisible [someIndex, someText.length] if scrollFlag
-         end
-         @textView.string
+      scrollFlag = %w[true yes 1].include?(options[:scroll].to_s.downcase)
+      unless someIndex > @textView.string.length || someText == ''  # nothing to add
+         someIndex = @textView.string.length + someIndex + 1 if someIndex < 0
+         @textView.replaceCharactersInRange([someIndex, 0], withString: someText)
+         @textView.scrollRangeToVisible [someIndex, someText.length] if scrollFlag
       end
+      @textView.string
    end
 
 
    # (re)set the animation of the progress indicator
-   def setSpinner(flag)
-      switch?(flag) ? @spinner.startAnimation(self) : @spinner.stopAnimation(self)
+   def setSpinner(progress)
+      return if (result = switch?(progress)).nil?
+      result ? @spinner.startAnimation(self) : @spinner.stopAnimation(self)
    end
 
    alias spinner= setSpinner
@@ -294,11 +282,11 @@ class MessageWindow < NSWindowController
    end
 
 
-# Check for a match with switch values (yes/no, on/off, etc).
-# Returns true/false if argument matches a switch, otherwise nil.
-def switch?(parameter)
-      return true if %W[true on yes start begin 1].include?(parameter.to_s.downcase)
-      return false if %W[false off no stop end 0].include?(parameter.to_s.downcase)
+   # Check for a match with switch values (yes/no, on/off, etc).
+   # Returns true/false if argument matches a switch, otherwise nil.
+   def switch?(value)
+      return true if %W[true on yes start begin 1].include?(value.to_s.downcase)
+      return false if %W[false off no stop end 0].include?(value.to_s.downcase)
       nil
    end
 
@@ -306,7 +294,7 @@ def switch?(parameter)
    # create the message window and its UI objects
    # Returns true if successful, false otherwise.
    def createMessageWindow
-      return true if @setup  # already created
+      return true if @done  # already created
       raise unless createWindow
       self.window.delegate = NSApp.delegate  # windowWillClose, etc
       self.window.windowController = self
@@ -315,9 +303,9 @@ def switch?(parameter)
          self.window.contentView.addSubview(view) if view
       end
       self.window.makeFirstResponder @spinner  # get focus off the imageView
-      @setup = true
+      @done = true
    rescue StandardError => error
-      @setup = false
+      @done = false
       errorString = "Error in MessageWindow's createMessageWindow method: "
       if error.class == NSException
          errorString += error.reason
@@ -408,14 +396,15 @@ def switch?(parameter)
    def createTextView
       @textView = NSTextView.alloc.initWithFrame TEXTVIEW_FRAME
       @textView.autoresizingMask = NSViewWidthSizable  # for wrapping view
-      # use mono spaced fonts such as Ayuthaya, [Andale Mono, Menlo], Monaco, Courier
-      @textView.font = NSFont.fontWithName('Menlo', size: 12)
       @textView.maxSize = [1.0E+5, 1.0E+5]  # set big enough to handle really long lines
       @textView.editable = true
       @textView.selectable = true
       @textView.allowsUndo = true
       @textView.horizontallyResizable = !@wrapping  # false for wrapping text
       @textView.verticallyResizable = true
+      @textView.usesFontPanel = true  # sync with the system font panel
+      @textView.usesFindPanel = true
+      setAttributes
       setupTextContainer
       createScrollView
    end
@@ -441,6 +430,27 @@ def switch?(parameter)
          obj.autohidesScrollers = true
          obj.documentView = @textView
       end
+   end
+
+
+   # Set text view attributes (tab stops, font, etc).
+   def setAttributes
+      attrString = NSMutableAttributedString.alloc.initWithString(" ")
+      paraStyle = NSMutableParagraphStyle.alloc.init
+      tabArray = NSMutableArray.array
+      (1..21).each do |index|  # add a few more tab stops
+         tabArray.addObject(NSTextTab.alloc.initWithType( NSLeftTabStopType,
+                                                location: index * 27.0))
+      end
+      paraStyle.tabStops = tabArray
+      attrString.addAttribute( NSParagraphStyleAttributeName,
+                        value: paraStyle,
+                        range: NSMakeRange(0, attrString.length))
+      # Use mono spaced fonts such as Ayuthaya, [Andale Mono, Menlo], Monaco, Courier
+      attrString.addAttribute( NSFontAttributeName,
+                        value: NSFont.fontWithName('Menlo', size: 12),
+                        range: NSMakeRange(0, attrString.length))
+      @textView.textStorage.attributedString = attrString
    end
 
 end

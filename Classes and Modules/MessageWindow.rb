@@ -1,7 +1,7 @@
 #
 #  MessageWindow.rb
 #
-#  Created by Red_Menace on 03-19-14, last updated/reviewed on 06-05-19
+#  Created by Red_Menace on 03-19-14, last updated/reviewed on 08-19-19
 #  Copyright (c) 2014-2019 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 #  All rights reserved.
 #
@@ -30,9 +30,10 @@
 #  scrolling text view, with an icon and multiple line label text field above it.
 #  The default icon and window title are those of the application (the icon is
 #  assumed to have a file extension of 'icns' with the name in the CFBundleIconFile
-#  Info.plist key - change the setIcon method to match the Rakefile if necessary).
+#  Info.plist key).
+#
 #  The message text view uses a mono-spaced font (default) to preserve shell script
-#  output formatting.
+#  output formatting, but can be edited and will accept attributed strings.
 #
 #  The message window is not a modal dialog or alert, and does not auto-resize
 #  around its contents - the default settings provide a scrolling text view that
@@ -46,21 +47,22 @@
 #
 #  Instance Methods:
 #     init - standard initialization (also .new)
-#     initWithWrapping - initialize with a wrapping text view
+#     initWithWrapping - initialize with a wrapping textView
 #     setup(parameters = {}) - set up the message window
 #     setTitle(titleText) - (re)set the window title
 #     setIcon(theIcon) - (re)set the message icon
 #     setLabel(labelText) - (re)set the message label textField
 #     setMessage(messageText, scroll = true) - (re)set the message textView
 #     addText(parameters = {}) - add text to the message textView
-#     setSpinner() - (re)set the animation of the progress indicator
+#     setSpinner(term) - (re)set the animation of the progress indicator
+#     setWrapMode(term) - (re)set the textView wrapping mode
 #
 #  Frequently used methods from parent classes:
 #     window.visible? - is the window visible?
 #     showWindow(sender) - show the window
 #     close - close the window
 #     (NSWindow).windowController - get the controller instance for a window
-#  The individual UI objects and userInfo ivars are also exposed in the accessors.
+#  Various UI objects and userInfo ivars are also exposed in the accessors.
 #
 #  Typical usage:
 #     initialize controller via Cocoa's alloc.init (or .new)
@@ -97,12 +99,13 @@ class MessageWindow < NSWindowController
    ##################################################
 
    # 'window' is already defined by the controller
-   attr_reader :labelField    # the label text field
+   attr_reader :labelField    # the label textField
    attr_reader :imageView     # for a small icon image
-   attr_reader :textView      # the main text view
+   attr_reader :textView      # the main textView
    attr_reader :title         # the title of the message window
    attr_reader :iconPath      # path for the icon, if using contents of a file
    attr_accessor :userInfo    # miscellaneous controller information (file path, etc)
+   attr_accessor :wrapping    # textView wrapping mode
 
 
    ##################################################
@@ -174,7 +177,6 @@ class MessageWindow < NSWindowController
       end
       @title = self.window.title
    end
-
    alias title= setTitle
 
 
@@ -195,7 +197,7 @@ class MessageWindow < NSWindowController
                   NSBundle.mainBundle.pathForResource(appIcon, ofType: 'icns')  # default
             end)
             adjustFrame(LABEL_OFFSET) if currentOrigin[0] != LABEL_FRAME[0][0]
-            @imageView.image = NSImage.alloc.initWithContentsOfFile iconFilePath
+            @imageView.image = NSImage.alloc.initWithContentsOfFile(iconFilePath)
          else
             @imageView.image = nil
             iconFilePath = ''
@@ -204,7 +206,6 @@ class MessageWindow < NSWindowController
       end
       @iconPath = iconFilePath
    end
-
    alias icon= setIcon
 
 
@@ -213,54 +214,76 @@ class MessageWindow < NSWindowController
    def setLabel(labelText)
       @labelField.stringValue = labelText.to_s
    end
-
    alias label= setLabel
 
 
-   # (re)set the contents of the message textView
-   # the message text can be an attributed string
-   # Returns the new message textView contents.
+   # (re)set the contents of the message textView - can be an attributed string
+   # Returns the new textView string.
    def setMessage(messageText, scroll = true)
       if messageText.class.to_s.end_with?('AttributedString')
-         @textView.attributedString = messageText
-         @textView.scrollRangeToVisible [messageText.to_s.length, 0] if scroll
-         @textView.attributedString
+         @textView.textStorage.attributedString = messageText
       else  # regular string
          @textView.string = messageText
-         @textView.scrollRangeToVisible [messageText.to_s.length, 0] if scroll
-         @textView.string
       end
+      scrolling = %w[true yes 1].include?(scroll.to_s.downcase)
+      @textView.scrollRangeToVisible([messageText.to_s.length, 0]) if scrolling
+      @textView.string
    end
-
    alias message= setMessage
 
 
-   # add text to the message textView, using default parameters as needed
-   # Returns the new message textView contents.
+   # add text to the message textView - can be an attributed string
+   # Returns the new textView string.
    def addText(parameters = {})
       options = { text: '',         # the text to add
                   index: -1,        # where to add it (beginning=0, ending=-1, etc)
-                  scroll: 'true'    # scroll to show added text?
+                  scroll: 'false'   # scroll to show added text?
                 }.merge(parameters)
-      someIndex = options[:index].to_i
       someText = options[:text]
-      scrollFlag = %w[true yes 1].include?(options[:scroll].to_s.downcase)
+      someIndex = options[:index].to_i
+      someIndex = @textView.string.length + someIndex + 1 if someIndex < 0
       unless someIndex > @textView.string.length || someText == ''  # nothing to add
-         someIndex = @textView.string.length + someIndex + 1 if someIndex < 0
-         @textView.replaceCharactersInRange([someIndex, 0], withString: someText)
-         @textView.scrollRangeToVisible [someIndex, someText.length] if scrollFlag
+         if someText.class.to_s.end_with?('AttributedString')
+            @textView.textStorage.replaceCharactersInRange( [someIndex, 0],
+                                      withAttributedString: someText)
+         else  # regular string
+            @textView.replaceCharactersInRange( [someIndex, 0],
+                                    withString: someText)
+         end
+         scrolling = %w[true yes 1].include?(options[:scroll].to_s.downcase)
+         @textView.scrollRangeToVisible([someIndex, someText.length]) if scrolling
       end
       @textView.string
    end
 
 
    # (re)set the animation of the progress indicator
-   def setSpinner(progress)
-      return if (result = switch?(progress)).nil?
-      result ? @spinner.startAnimation(self) : @spinner.stopAnimation(self)
+   def setSpinner(term)
+      return if (mode = switch?(term)).nil?
+      mode ? @spinner.startAnimation(self) : @spinner.stopAnimation(self)
    end
-
    alias spinner= setSpinner
+
+
+   # (re)set text wrapping mode.
+   def setWrapMode(term)
+      return if (mode = switch?(term)).nil?
+      if mode  # wrap at textView width
+         layoutSize = NSMakeSize(@textView.enclosingScrollView.contentSize.width, 1.0E+4)
+         @textView.enclosingScrollView.hasHorizontalScroller = false
+         @textView.textContainer.widthTracksTextView = true
+      else  # no wrapping
+         layoutSize = NSMakeSize(1.0E+4, 1.0E+4)
+         @textView.maxSize = layoutSize
+         @textView.enclosingScrollView.hasHorizontalScroller = true
+         @textView.textContainer.widthTracksTextView = false
+      end
+      @textView.textContainer.containerSize = layoutSize
+      @textView.textContainer.lineFragmentPadding = (mode ? 12.0 : 3.0)
+      @textView.enclosingScrollView.needsDisplay = true
+      @wrapping = mode
+   end
+   alias wrapMode= setWrapMode
 
 
    ##################################################
@@ -302,7 +325,8 @@ class MessageWindow < NSWindowController
       [createImageView, createLabel, createTextView].each do |view|
          self.window.contentView.addSubview(view) if view
       end
-      self.window.makeFirstResponder @spinner  # get focus off the imageView
+      setWrapMode(@wrapping)
+      self.window.makeFirstResponder(@spinner)  # get focus off the imageView
       @done = true
    rescue StandardError => error
       @done = false
@@ -329,8 +353,6 @@ class MessageWindow < NSWindowController
                                            defer: true)
       self.window.contentMinSize = WINDOW_MIN_SIZE
       self.window.preventsApplicationTerminationWhenModal = false
-      self.window.releasedWhenClosed = false  # so window can be shown again
-      self.window.level = NSNormalWindowLevel  # NSFloatingWindowLevel
       self.window.allowsConcurrentViewDrawing = true
       self.window.hasShadow = true
    end
@@ -373,11 +395,10 @@ class MessageWindow < NSWindowController
                                 NSViewMinYMargin
          obj.bordered = false
          obj.drawsBackground = false
-         obj.font = NSFont.boldSystemFontOfSize 12  # systemFontOfSize 13
+         obj.font = NSFont.boldSystemFontOfSize(12)  # systemFontOfSize 13
          obj.editable = false
          obj.selectable = true
          obj.cell.alignment = NSNaturalTextAlignment
-         obj.cell.lineBreakMode = NSLineBreakByWordWrapping  # NSLineBreakByCharWrapping
       end
    end
 
@@ -394,27 +415,16 @@ class MessageWindow < NSWindowController
 
    # Returns the textView/scrollView object for addition to the window content.
    def createTextView
-      @textView = NSTextView.alloc.initWithFrame TEXTVIEW_FRAME
+      @textView = NSTextView.alloc.initWithFrame(TEXTVIEW_FRAME)
       @textView.autoresizingMask = NSViewWidthSizable  # for wrapping view
-      @textView.maxSize = [1.0E+5, 1.0E+5]  # set big enough to handle really long lines
+      @textView.horizontallyResizable = true
       @textView.editable = true
       @textView.selectable = true
       @textView.allowsUndo = true
-      @textView.horizontallyResizable = !@wrapping  # false for wrapping text
-      @textView.verticallyResizable = true
       @textView.usesFontPanel = true  # sync with the system font panel
       @textView.usesFindPanel = true
       setAttributes
-      setupTextContainer
       createScrollView
-   end
-
-
-   def setupTextContainer
-      @textView.textContainer.containerSize = [1.0E+5, 1.0E+5]  # same as @textView.maxSize
-      @textView.textContainer.widthTracksTextView = @wrapping  # true for wrapping text
-      @textView.textContainer.heightTracksTextView = false
-      @textView.textContainer.lineFragmentPadding = (@wrapping ? 12.0 : 3.0)
    end
 
 
@@ -435,7 +445,7 @@ class MessageWindow < NSWindowController
 
    # Set text view attributes (tab stops, font, etc).
    def setAttributes
-      attrString = NSMutableAttributedString.alloc.initWithString(" ")
+      attrString = NSMutableAttributedString.alloc.initWithString(' ')
       paraStyle = NSMutableParagraphStyle.alloc.init
       tabArray = NSMutableArray.array
       (1..21).each do |index|  # add a few more tab stops

@@ -1,7 +1,7 @@
 #
 # AlertLib - a library for creating NSAlert modal dialogs
 #
-# Created by Red_Menace on 07-22-17, last updated/reviewed on 08-17-19
+# Created by Red_Menace on 07-22-17, last updated/reviewed on 08-22-19
 # Copyright (c) 2017-2019 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 # All rights reserved.
 #
@@ -30,9 +30,10 @@
 # NSAlert modal dialogs.  A standard dialog can be created and enhanced (accessoryViews,
 # fonts, colors, etc) by using method names in a block with Class#new.
 #
-# An accessoryView is only created if there is an input, and can be a comboBox, radio or
-# checkBoxes (for input), or a textField (for input/output).  Fonts for the default label
-# fields can also be changed, and the alert message label can be hidden (more-or-less).
+# An accessoryView is only created if there is an input, and can be a comboBox,
+# radioButton or checkBoxes (for input), or a textField (for input/output).  Fonts
+# for the default label fields can also be changed, and the alert message label can
+# be hidden (more-or-less).
 #
 # Nothing too fancy with the textField, it is mostly intended for shell formatted output
 # and user input (it is editable).  Note that since it is a textField and not a textView,
@@ -47,8 +48,8 @@
 # of the alert interface items (buttons, accessoryView, etc), including the original
 # size of the textFields, can't be changed after the alert has been created.
 #
-# The checkbox and radio accessoryViews are identical except for the way the buttons
-# operate, and radio will only let one button be set.
+# The checkbox and radiobutton accessoryViews are identical except for the way the
+# buttons operate, and radiobutton will only let one button be set.
 # Hash#select for value == 1 can be used to get the selection(s).
 #
 # NOTE:  No checks are done to ensure the dialog fits in the dislay, so constraints can
@@ -58,9 +59,9 @@
 # The alert reply varies a little bit depending on the accessoryView used, but consists
 # of a hash of the button pressed (or "gave up" if it timed out) and the accessoryView
 # values (if any), for example:
-#        { button: "Whatever", reply: nil }  # no accessory (or Cancel button)
-#        { button: "OK", reply: "This is a test." }  # textField and comboBox
-#        { button: "OK", reply: {"checkBox 1": 1, "checkBox 2": 0} }  # checkBox and radio
+#  { button: "Whatever", reply: nil }  # no accessory (or Cancel button)
+#  { button: "OK", reply: "This is a test." }  # textField and comboBox
+#  { button: "OK", reply: {"checkBox 1": 1, "checkBox 2": 0} }  # checkBox and radiobutton
 #
 # The remaining delay/give up time (if used) is shown under the alert icon.
 #
@@ -143,8 +144,8 @@ class MEalert
    INSET = 125          # accessory view inset
    TEXT_HEIGHT = 22     # textfield height
    COMBO_HEIGHT = 28    # combobox height - the compiler complains, but only a couple larger
-   BUTTON_HEIGHT = 26   # checkbox/radio button height
-   PADDING = 11         # padding around checkbox/radio buttons
+   BUTTON_HEIGHT = 26   # checkbox/radiobutton height
+   PADDING = 11         # padding around checkbox/radiobutton
    RESOURCES = '/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/'
    
    # websafe colors and their inverses
@@ -210,38 +211,22 @@ class MEalert
    ##################################################
 
    def initialize(&block)
-      @sheet = false       # display the alert as a sheet?
-      @delayTime = 0       # a delay time for the give-up timer
-      @countdown = 0       # a countdown of the delay time
-      makeTimerLabel
-      @buttonList = []     # this will be a list of button titles
-      @accessory = nil     # this will be any accessory view
-      @accessoryType = 'textfield' # can be textfield, combobox, checkbox, or radio
+      @sheet = false  # display the alert as a sheet?
+      @delayTime = 0  # a delay time for the give-up timer
+      @countdown = 0  # a countdown of the delay time
+      @buttonList = []  # this will be a list of button titles
+      @accessory = nil  # this will be any accessory view
+      @accessoryType = 'textfield'  # can be textfield, combobox, checkbox, or radiobutton
       @coloration = { text: nil, background: nil }  # accessory colors - nil will auto select
-      @dimensions = { width: nil, height: nil }     # accessory sizes - nil will auto adjust
-      @input = nil         # accessory view input item(s)
-      @labels = nil        # labels (tool tips) for accessory input item(s)
-      @placeholder = nil   # placeholder text for the accessory
-      @secure = false      # obscure accessory textField contents? (NSSecureTextField)
-      @border = nil        # the border style of the accessory
+      @dimensions = { width: nil, height: nil }  # accessory sizes - nil will auto adjust
+      @input = nil  # accessory view input item(s)
+      @labels = []  # labels (tool tips) for accessory input item(s)
+      @placeholder = nil  # placeholder text for the accessory
+      @secure = false  # obscure accessory textField contents? (NSSecureTextField)
+      @border = nil  # the border style of the accessory
       @alert = NSAlert.alloc.init  # other NSAlert parameters use the defaults
       @alert.window.autorecalculatesKeyViewLoop = true  # hook added views into key-view loop
       instance_eval(&block) if block_given?  # do the meta thing
-   end
-
-
-   # Make a countdown label for use by the give up timer.
-   def makeTimerLabel
-      @timerField = NSTextField.alloc.initWithFrame([[0, 0], [40, 20]])
-                               .tap do |obj|  # origin will be set later
-         obj.bordered = false
-         obj.drawsBackground = false
-         obj.font = NSFont.fontWithName('Menlo Bold', size: 14)  # mono-spaced
-         obj.editable = false
-         obj.selectable = false
-         obj.alignment = NSCenterTextAlignment
-         obj.toolTip = 'time remaining'
-      end
    end
 
 
@@ -257,12 +242,12 @@ class MEalert
       updateAccessory if @accessory && @accessoryType == 'textfield'
       timer = setTimer
       answer = nil
-      response = buttonPressed()
+      response = buttonPressed(timer)
       timer.invalidate unless timer.nil?
       case @accessoryType
       when 'textfield', 'combobox'
          answer = @accessory.stringValue.to_s  # handle nil
-      when 'checkbox', 'radio'
+      when 'checkbox', 'radiobutton'
          answer = {}
          @accessory.contentView.subviews.each { |item| answer[item.title] = item.state }
       end if @accessory
@@ -300,22 +285,28 @@ class MEalert
 
    # (re)set the alert icon
    # Can be the styles 'informational', 'warning', 'critical', the system alert icons
-   # 'note', 'caution', 'stop', system icons 'question', 'tools', or an image file path.
+   # 'note', 'caution', 'stop', other system icons 'info', 'tools', 'delete', 'question',
+   # or an image file path.
    # Note that NSAlert will use the application icon if a valid icon is not specified.
    def icon(iconType)
+      theFile = nil
       case type = iconType.to_s.downcase
       when 'critical'
-         @alert.alertStyle, theFile = NSCriticalAlertStyle
+         @alert.alertStyle = NSCriticalAlertStyle
       when '', 'informational', 'warning'  # default application icon
-         @alert.alertStyle, theFile = NSInformationalAlertStyle  # NSWarningAlertStyle
+         @alert.alertStyle = NSInformationalAlertStyle  # NSWarningAlertStyle
       when 'note', 'caution', 'stop'  # system alert icon
          theFile = "#{RESOURCES}Alert#{type.capitalize}Icon.icns"
-      when 'question', 'tools'  # other system icon
-         item = type == 'tools' ? 'ToolbarCustomize' : 'GenericQuestionMark'
-         theFile = "#{RESOURCES}#{item}Icon.icns"
-      else  theFile = iconType.nil? ? nil : iconType.to_s
+      when 'info' then theFile = "#{RESOURCES}ToolbarInfo.icns"
+      when 'tools' then theFile = "#{RESOURCES}ToolbarCustomizeIcon.icns"
+      when 'delete' then theFile = "#{RESOURCES}ToolbarDeleteIcon.icns"
+      when 'question' then theFile = "#{RESOURCES}GenericQuestionMarkIcon.icns"
+      else  theFile = iconType.to_s unless iconType.nil?
       end
-      @alert.icon = NSImage.alloc.initWithContentsOfFile(theFile) unless theFile.nil?
+      unless theFile.nil?
+         candidate = NSImage.alloc.initByReferencingFile(theFile)
+         @alert.icon = candidate if candidate.isValid
+      end
    end
    alias icon= icon
 
@@ -344,6 +335,16 @@ class MEalert
    # (re)set the alert dialog give-up time delay (seconds)
    def giveUp(timeDelay)
       @delayTime = timeDelay.abs.to_i
+      @timerField = NSTextField.alloc.initWithFrame([[0, 0], [40, 20]])
+                               .tap do |obj|  # origin will be set later
+         obj.bordered = false
+         obj.drawsBackground = false
+         obj.font = NSFont.fontWithName('Menlo Bold', size: 14)  # mono-spaced
+         obj.editable = false
+         obj.selectable = false
+         obj.alignment = NSCenterTextAlignment
+         obj.toolTip = 'time remaining'
+      end unless defined?(@timerField)
    end
    alias giveUp= giveUp
 
@@ -360,7 +361,7 @@ class MEalert
    ##################################################
 
    # set the type of the accessory view
-   # Valid types are 'textfield', 'combobox', 'checkbox', or 'radio'.
+   # Valid types are 'textfield', 'combobox', 'checkbox', or 'radiobutton'.
    def accessory(type)
       @accessoryType = type.nil? ? nil : type.to_s.downcase
    end
@@ -473,7 +474,6 @@ class MEalert
                     .tap do |timer|
          @countdown = @delayTime
          @timerField.stringValue = @countdown.to_int.to_s
-         NSRunLoop.mainRunLoop.addTimer(timer, forMode: NSModalPanelRunLoopMode)
       end if @delayTime > 1
       nil
    end
@@ -492,7 +492,8 @@ class MEalert
 
 
    # Get the title of the button pressed, or 'gave up' if timed out.
-   def buttonPressed
+   def buttonPressed(timer)
+      NSRunLoop.mainRunLoop.addTimer(timer, forMode: NSModalPanelRunLoopMode) unless timer.nil?
       response = @sheet && NSApp.mainWindow ? @alert.runModalSheet : @alert.runModal
       response < 0 ? 'gave up' : @buttonList[response - 1000]
    end
@@ -510,12 +511,12 @@ class MEalert
    
    # Filter a list for blanks and duplicates.
    # Trailing newlines (indicating set/checked) are chomped for combobox items, chomped
-   # after the first one for radio items, and ignored when matching checkbox items.
+   # after the first one for radiobutton items, and ignored when matching checkbox items.
    def filterList(input)
       set = false
       Array(input).each_with_object(Array.new) do |item, output|
         item = item.to_s
-        item = item.chomp if (@accessoryType == 'combobox') || (@accessoryType == 'radio' && set)
+        item = item.chomp if (@accessoryType == 'combobox') || (@accessoryType == 'radiobutton' && set)
         set = true if item.end_with?("\n")
         output << item unless item.empty? || (output & [item, "#{item}\n"]).any?
       end
@@ -536,11 +537,12 @@ class MEalert
       when 'textfield' then textFieldAccessory(width, MAX_HEIGHT)
       when 'combobox' then comboBoxAccessory(width, COMBO_HEIGHT)
       when 'checkbox' then buttonAccessory(width, MAX_HEIGHT, false)
-      when 'radio' then buttonAccessory(width, MAX_HEIGHT, true)
+      when 'radiobutton' then buttonAccessory(width, MAX_HEIGHT, true)
       end
       if @delayTime > 1
          @alert.layout  # get new layout
-         offset = @alert.window.frame.size.height - 130  # under the icon
+         offset = @alert.window.frame.size.height
+         offset -= 130
          @timerField.frameOrigin = [37, offset]
          @alert.window.contentView.addSubview(@timerField)
       end
@@ -602,7 +604,7 @@ class MEalert
    end
       
    
-   # Make a checkBox or radio accessoryView - the width will use the specified setting
+   # Make a checkBox or radioButton accessoryView - the width will use the specified setting
    # or auto-adjust for the longest input item (the width will not be smaller than the
    # dialog width), and the height will always auto-adjust for the number of items.
    # Input items ending with a newline will be set/checked (button title is chomped).
@@ -639,7 +641,7 @@ class MEalert
       end.tap do |button|
          button.cell.lineBreakMode = 5  # NSLineBreakByTruncatingMiddle
          if item.end_with?("\n")  # set/check
-            button.state = NSOnState
+            button.state = NSOnState  # NSControlStateValueOn
             item = item.chomp
          end
          button.title = item

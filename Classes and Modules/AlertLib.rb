@@ -586,13 +586,14 @@ class MEalert
          combo.hasVerticalScroller = true
          combo.numberOfVisibleItems = 10  # arbitrary (default is 5)
          comboWidth = width
+         combo.toolTip = @labels.to_s
          menuList.each_with_index do |item, index|
             combo.addItemWithObjectValue(item)
-            combo.toolTip = @labels[index]
             if @dimensions[:width].nil?
                combo.stringValue = item
                combo.sizeToFit  # kludge to get max width when auto-sizing
                comboWidth = combo.frame.size.width if combo.frame.size.width > comboWidth
+               combo.stringValue = ''
             end
          end
          combo.frameSize = [comboWidth + 10, height]  # adjust for contents

@@ -1,7 +1,7 @@
 #
 #  MessageWindow.rb
 #
-#  Created by Red_Menace on 03-19-14, last updated/reviewed on 08-19-19
+#  Created by Red_Menace on 03-19-14, last updated/reviewed on 08-29-19
 #  Copyright (c) 2014-2019 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 #  All rights reserved.
 #
@@ -86,11 +86,11 @@ class MessageWindow < NSWindowController
 
    V_SHIFT = 0    # subview shift from standard height (+/- 250)
    H_SHIFT = 0    # subview shift from standard width (+/- 300)
-   WINDOW_RECT = [[400, 600], [621 + H_SHIFT, 461 + V_SHIFT]]  # standard (~ 80 x 24)
-   WINDOW_MIN_SIZE =          [371, 181]                       # minimum (~ 45 x 5)
-   IMAGE_FRAME = [[20, 393 + V_SHIFT], [48, 48]]               # icon imageView
-   LABEL_FRAME = [[80, 393 + V_SHIFT], [524 + H_SHIFT, 48]]    # frame when using an icon
-   LABEL_OFFSET = 60                                           # offset when not using icon
+   WINDOW_RECT = [[400, 600], [621 + H_SHIFT, 479 + V_SHIFT]]  # standard (~ 80 x 24)
+   WINDOW_MIN_SIZE =          [371, 197]                       # minimum (~ 45 x 5)
+   IMAGE_FRAME = [[20, 393 + V_SHIFT], [64, 64]]               # icon imageView
+   LABEL_FRAME = [[96, 393 + V_SHIFT], [505 + H_SHIFT, 66]]    # frame when using an icon
+   LABEL_OFFSET = 76                                           # offset when not using icon
    TEXTVIEW_FRAME = [[20, 20], [581 + H_SHIFT, 353 + V_SHIFT]] # also for the scroll view
 
 
@@ -391,14 +391,13 @@ class MessageWindow < NSWindowController
    # Returns the label object for addition to the window content.
    def createLabel
       @labelField = NSTextField.alloc.initWithFrame(LABEL_FRAME).tap do |obj|
-         obj.autoresizingMask = NSViewWidthSizable |
-                                NSViewMinYMargin
+         obj.autoresizingMask = NSViewWidthSizable | NSViewMinYMargin
          obj.bordered = false
          obj.drawsBackground = false
          obj.font = NSFont.boldSystemFontOfSize(12)  # systemFontOfSize 13
          obj.editable = false
          obj.selectable = true
-         obj.cell.alignment = NSNaturalTextAlignment
+         obj.alignment = NSNaturalTextAlignment
       end
    end
 
@@ -431,9 +430,7 @@ class MessageWindow < NSWindowController
    # Returns the scrollView.
    def createScrollView
       @scrollView = NSScrollView.alloc.initWithFrame(TEXTVIEW_FRAME).tap do |obj|
-         obj.autoresizingMask = NSViewWidthSizable |
-                                NSViewMaxXMargin |
-                                NSViewHeightSizable
+         obj.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable
          obj.borderType = NSBezelBorder
          obj.hasVerticalScroller = true
          obj.hasHorizontalScroller = true

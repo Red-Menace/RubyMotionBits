@@ -119,7 +119,7 @@ class NSAlert
    # Run a synchronous sheet for a window using asynchronous callback.
    def runModalSheetForWindow(theWindow)
       self.beginSheetModalForWindow( theWindow,
-                  completionHandler: lambda { |reply| NSApp.stopModalWithCode(reply) })
+                  completionHandler: lambda { |reply| NSApp.stopModalWithCode(reply) } )
       NSApp.runModalForWindow(self.window)  # window modal event loop
    end
    
@@ -202,7 +202,7 @@ class MEalert
          NSColor.colorWithSRGBRed( rgb[0],
                             green: rgb[1],
                              blue: rgb[2],
-                            alpha: 1.0)
+                            alpha: 1.0 )
       end
 
    end
@@ -689,7 +689,6 @@ class MEalert
             @accessory.bordered = true
          when 'color'
             @accessory.bordered = true
-            @accessory.wantsLayer = true
             setBorderColor
          end
       end

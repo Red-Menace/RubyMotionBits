@@ -1,7 +1,7 @@
 #
 # AlertLib - a library for creating NSAlert modal dialogs
 #
-# Created by Red_Menace on 07-22-17, last updated/reviewed on 08-22-19
+# Created by Red_Menace on 07-22-17, last updated/reviewed on 09-03-19
 # Copyright (c) 2017-2019 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 # All rights reserved.
 #
@@ -81,21 +81,22 @@
 # Instance methods:
 #     display                       # display the alert using the current settings
 #     title(titleText)              # alert title
-#     message(messageText, messageFont)   # alert message (bold)
+#     message(messageText, messageFont)   # alert message text (bold)
 #     info(infoText, infoFont)      # informative text
 #     icon(iconType)                # alert icon
 #     buttons(buttonArray, default) # the alert buttons
 #     giveUp(delayTime)             # a give up time, after which the alert is dismissed
-#     sheet(flag)                   # set the alert to be shown as a sheet
+#     sheet(flag)                   # show the alert as a sheet
 #
 #     accessory(accessoryType)      # accessoryView type
 #     input(item)                   # input item(s) for the accessoryView
 #     labels(item)                  # labels for input item(s)
 #     textColor(colorName, target)  # text color for the textField or label fields
 #     backgroundColor(colorName, target)  # background color for the textField or window
+#     borderColor(colorName)        # border color for the textField or check/radio box
 #     placeholder(placeholderText)  # placeholder text
 #     secure(flag)                  # set the textField to be secure/obscured
-#     border(borderStyle)           # accessory border style
+#     border(borderStyle)           # accessory border style (none, line, or color)
 #     width(accessoryWidth)         # accessory width
 #     height(accessoryHeight)       # accessory height
 #
@@ -143,7 +144,7 @@ class MEalert
    MIN_HEIGHT = 25      # a minimum height, based on a single line of text
    INSET = 125          # accessory view inset
    TEXT_HEIGHT = 22     # textfield height
-   COMBO_HEIGHT = 28    # combobox height - the compiler complains, but only a couple larger
+   COMBO_HEIGHT = 25    # combobox height
    BUTTON_HEIGHT = 26   # checkbox/radiobutton height
    PADDING = 11         # padding around checkbox/radiobutton
    RESOURCES = '/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/'
@@ -187,6 +188,7 @@ class MEalert
             when 'windowBackground' then return NSColor.windowBackgroundColor  # 0.93
             when 'textColor' then return NSColor.textColor  # 0.0
             when 'backgroundColor' then return NSColor.textBackgroundColor  # 1.0
+            when 'clear' then return NSColor.clearColor
             else color
             end
          end
@@ -217,7 +219,7 @@ class MEalert
       @buttonList = []  # this will be a list of button titles
       @accessory = nil  # this will be any accessory view
       @accessoryType = 'textfield'  # can be textfield, combobox, checkbox, or radiobutton
-      @coloration = { text: nil, background: nil }  # accessory colors - nil will auto select
+      @coloration = { text: nil, background: nil, border: nil }  # accessory colors - nil will auto select
       @dimensions = { width: nil, height: nil }  # accessory sizes - nil will auto adjust
       @input = nil  # accessory view input item(s)
       @labels = []  # labels (tool tips) for accessory input item(s)
@@ -240,10 +242,9 @@ class MEalert
       buttons(['OK']) if @buttonList == []
       makeAccessory unless @accessory
       updateAccessory if @accessory && @accessoryType == 'textfield'
-      timer = setTimer
-      answer = nil
-      response = buttonPressed(timer)
+      response = buttonPressed(timer = setTimer)
       timer.invalidate unless timer.nil?
+      answer = nil
       case @accessoryType
       when 'textfield', 'combobox'
          answer = @accessory.stringValue.to_s  # handle nil
@@ -317,9 +318,8 @@ class MEalert
    def buttons(buttonArray, default = true)
       return if (buttonArray = filterList(buttonArray)).empty? || !@buttonList.empty?
       theButton = nil
-      Array(buttonArray).reverse.each do |aButton|  # buttons added right-to-left
-         aButton = aButton.to_s
-         theButton = @alert.addButtonWithTitle(aButton)
+      buttonArray.reverse.each do |aButton|  # buttons added right-to-left
+         theButton = @alert.addButtonWithTitle(aButton = aButton.to_s)
          @buttonList << aButton
          unless default == true  # normal focus, default index as specified
             theButton.keyEquivalent = '' unless aButton == 'Cancel'
@@ -411,6 +411,14 @@ class MEalert
       end
    end
    alias backgroundColor= backgroundColor
+   
+   
+   # (re)set the textField/box border color
+   def borderColor(theColor)
+      return if theColor.nil?
+      @coloration[:border] = theColor
+   end
+   alias borderColor= borderColor
 
 
    # (re)set the placeholder text
@@ -428,7 +436,7 @@ class MEalert
 
 
    # Set the accessory border style.
-   # Can be 'line' or 'none', otherwise the default is used.
+   # Can be 'line', 'none', or 'color', otherwise the default is used.
    def border(borderStyle)
       @border = borderStyle.nil? ? nil : borderStyle.to_s.downcase
    end
@@ -466,7 +474,7 @@ class MEalert
 
    # Set the give-up timer.
    def setTimer
-      return NSTimer.timerWithTimeInterval( 1,
+      return NSTimer.timerWithTimeInterval( 1.0,
                                     target: self,
                                   selector: 'updateCountdown:',
                                   userInfo: nil,
@@ -514,7 +522,7 @@ class MEalert
    # after the first one for radiobutton items, and ignored when matching checkbox items.
    def filterList(input)
       set = false
-      Array(input).each_with_object(Array.new) do |item, output|
+      Array(input).each_with_object([]) do |item, output|
         item = item.to_s
         item = item.chomp if (@accessoryType == 'combobox') || (@accessoryType == 'radiobutton' && set)
         set = true if item.end_with?("\n")
@@ -541,8 +549,7 @@ class MEalert
       end
       if @delayTime > 1
          @alert.layout  # get new layout
-         offset = @alert.window.frame.size.height
-         offset -= 130
+         offset = @alert.window.frame.size.height - 130
          @timerField.frameOrigin = [37, offset]
          @alert.window.contentView.addSubview(@timerField)
       end
@@ -636,11 +643,11 @@ class MEalert
    # Make an individual button for the buttonAccessory.
    def makeButton(radio, item)
       if radio
-         NSButton.radioButtonWithTitle('', target:self, action:'no_op:')
+         NSButton.radioButtonWithTitle('', target: self, action: 'buttonAction:')
       else
-         NSButton.checkboxWithTitle('', target:self, action:'no_op:')
+         NSButton.checkboxWithTitle('', target: self, action: 'buttonAction:')
       end.tap do |button|
-         button.cell.lineBreakMode = 5  # NSLineBreakByTruncatingMiddle
+         button.lineBreakMode = 5  # NSLineBreakByTruncatingMiddle
          if item.end_with?("\n")  # set/check
             button.state = NSOnState  # NSControlStateValueOn
             item = item.chomp
@@ -650,22 +657,28 @@ class MEalert
    end
    
    
-   # Dummy action method to group radio buttons.
-   def no_op(sender) end
+   # Button action method.
+   def buttonAction(sender)
+      # nothing (yet)
+   end
    
    
    # Set the border style.
+   # A 'color' style is the same as bordered, but using the color set with borderColor.
    # Default box is no border with light gray fill, textField is bezeled border.
    def setBorder
       if @accessory.class == NSBox
+         @accessory.boxType = NSBoxCustom
          case @border
          when 'none'  # no border or fill color
-            @accessory.boxType = NSBoxCustom
             @accessory.borderType = NSNoBorder
          when 'line'  # line border with gray fill
-            @accessory.boxType = NSBoxCustom
             @accessory.borderType = NSLineBorder
             @accessory.fillColor = MEalert.getColor 'box'
+         when 'color'  # color border with gray fill
+            @accessory.borderType = NSLineBorder
+            @accessory.fillColor = MEalert.getColor 'box'
+            setBorderColor
          end
       else # NSTextField
          case @border
@@ -674,10 +687,22 @@ class MEalert
             @accessory.bezeled = false
          when 'line'
             @accessory.bordered = true
+         when 'color'
+            @accessory.bordered = true
+            @accessory.wantsLayer = true
+            setBorderColor
          end
       end
    end
 
-end
 
+   def setBorderColor
+      ciColor = CIColor.alloc.initWithColor(MEalert.getColor(@coloration[:border]))
+      cgColor = CGColorCreate(ciColor.colorSpace, ciColor.components)
+      @accessory.wantsLayer = true
+      @accessory.layer.borderColor = cgColor
+      @accessory.layer.borderWidth = 1
+   end
+
+end
 

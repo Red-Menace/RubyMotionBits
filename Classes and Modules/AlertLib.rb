@@ -1,7 +1,7 @@
 #
 # AlertLib - a library for creating NSAlert modal dialogs
 #
-# Created by Red_Menace on 07-22-17, last updated/reviewed on 09-03-19
+# Created by Red_Menace on 07-22-17, last updated/reviewed on 12-05-19
 # Copyright (c) 2017-2019 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 # All rights reserved.
 #
@@ -87,6 +87,7 @@
 #     buttons(buttonArray, default) # the alert buttons
 #     giveUp(delayTime)             # a give up time, after which the alert is dismissed
 #     sheet(flag)                   # show the alert as a sheet
+#     help(info, message)           # show a button for a help alert
 #
 #     accessory(accessoryType)      # accessoryView type
 #     input(item)                   # input item(s) for the accessoryView
@@ -149,7 +150,7 @@ class MEalert
    PADDING = 11         # padding around checkbox/radiobutton
    RESOURCES = '/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/'
    
-   # websafe colors and their inverses
+   # basic (0.0, 0.5, 1.0) set of colors and their inverses (20 + 3 grays)
    COLORS = { 'black' =>  [0.0, 0.0, 0.0],     'white' =>        [1.0, 1.0, 1.0],
               'blue' =>   [0.0, 0.0, 1.0],     'yellow' =>       [1.0, 1.0, 0.0],
               'lime' =>   [0.0, 1.0, 0.0],     'magenta' =>      [1.0, 0.0, 1.0],
@@ -157,11 +158,11 @@ class MEalert
               'navy' =>   [0.0, 0.0, 0.5],     'lightYellow' =>  [1.0, 1.0, 0.5],
               'green' =>  [0.0, 0.5, 0.0],     'lightMagenta' => [1.0, 0.5, 1.0],
               'teal' =>   [0.0, 0.5, 0.5],     'lightRed' =>     [1.0, 0.5, 0.5],
-              'silver' => [0.75, 0.75, 0.75],  'darkGray' =>     [0.25, 0.25, 0.25],
-              'gray' =>   [0.5, 0.5, 0.5],     'custom' =>       [0.5, 0.5, 0.5],  # whatever
               'maroon' => [0.5, 0.0, 0.0],     'lightCyan' =>    [0.5, 1.0, 1.0],
               'purple' => [0.5, 0.0, 0.5],     'lightGreen' =>   [0.5, 1.0, 0.5],
-              'olive' =>  [0.5, 0.5, 0.0],     'lightBlue' =>    [0.5, 0.5, 1.0] }
+              'olive' =>  [0.5, 0.5, 0.0],     'lightBlue' =>    [0.5, 0.5, 1.0],
+              'silver' => [0.75, 0.75, 0.75],  'darkGray' =>     [0.25, 0.25, 0.25],
+              'gray' =>   [0.5, 0.5, 0.5],     'custom' =>       [0.5, 0.5, 0.5] }  # whatever
 
 
    ##################################################
@@ -224,9 +225,11 @@ class MEalert
       @input = nil  # accessory view input item(s)
       @labels = []  # labels (tool tips) for accessory input item(s)
       @placeholder = nil  # placeholder text for the accessory
+      @help = nil  # an array of [helpMessageText, helpInformativeText]
       @secure = false  # obscure accessory textField contents? (NSSecureTextField)
       @border = nil  # the border style of the accessory
       @alert = NSAlert.alloc.init  # other NSAlert parameters use the defaults
+      @alert.delegate = self
       @alert.window.autorecalculatesKeyViewLoop = true  # hook added views into key-view loop
       instance_eval(&block) if block_given?  # do the meta thing
    end
@@ -355,7 +358,36 @@ class MEalert
    end
    alias sheet= sheet
    
+
+   # (re)set the alert help button.
+   # The help message and info will be displayed in a sheet over the original alert.
+   def help(info, message = nil)
+      return if info.nil?
+      @alert.showsHelp = true
+      @help = [info, message]
+   end
+   alias help= help
+
    
+   ##################################################
+   #  #mark ――― Alert Delegate Methods ―――
+   ##################################################
+
+   # show the alert help sheet using a standard NSAlert
+   # If there isn't any message text, the font is made small to reclaim space.
+   def alertShowHelp(theAlert)
+      info, message = *@help
+      helpAlert = NSAlert.alloc.init
+      helpAlert.window.contentView.subviews[4]
+               .font = NSFont.boldSystemFontOfSize(0.25) if message.nil?
+      helpAlert.messageText = message unless message.nil?
+		helpAlert.informativeText = info.to_s
+		helpAlert.icon = NSImage.alloc.initByReferencingFile("#{RESOURCES}ToolbarInfo.icns")
+      helpAlert.beginSheetModalForWindow(theAlert.window, completionHandler: nil)
+	   true
+   end
+
+
    ##################################################
    #  #mark ――― Accessory View Methods ―――
    ##################################################
@@ -485,8 +517,8 @@ class MEalert
       end if @delayTime > 1
       nil
    end
-
-
+   
+   
    # Update the countdown timer display.
    def updateCountdown(timer)
       @countdown -= 1
@@ -565,6 +597,7 @@ class MEalert
                             .alloc.initWithFrame([[0, 0], [width, height]])
                             .tap do |text|
          text.font = NSFont.fontWithName('Menlo', size: 13)  # monospaced
+         text.refusesFirstResponder = true
       end
       updateAccessory
       @accessory.frameSize = @accessory.cell.cellSizeForBounds([[0, 0], [width, height]])
@@ -633,7 +666,8 @@ class MEalert
             end
             box.addSubview(button)
          end
-         box.frameSize = [buttonWidth + 10, height + PADDING]  # adjust box for contents
+         adjustment = @sheet ? PADDING : (PADDING / 2) + 1  # sheet vs window
+         box.frameSize = [buttonWidth + 10, height + adjustment]  # adjust box for contents
       end
       setBorder
       @alert.accessoryView = @accessory
@@ -655,47 +689,47 @@ class MEalert
          button.title = item
       end
    end
-   
-   
+
+
    # Button action method.
    def buttonAction(sender)
       # nothing (yet)
    end
-   
-   
+
+
    # Set the border style.
    # A 'color' style is the same as bordered, but using the color set with borderColor.
    # Default box is no border with light gray fill, textField is bezeled border.
    def setBorder
+      return if @border.nil?  # default
       if @accessory.class == NSBox
          @accessory.boxType = NSBoxCustom
+         @accessory.cornerRadius = 5.0
          case @border
          when 'none'  # no border or fill color
             @accessory.borderType = NSNoBorder
-         when 'line'  # line border with gray fill
+         when 'line', 'color'  # line border with gray fill
             @accessory.borderType = NSLineBorder
             @accessory.fillColor = MEalert.getColor 'box'
-         when 'color'  # color border with gray fill
-            @accessory.borderType = NSLineBorder
-            @accessory.fillColor = MEalert.getColor 'box'
-            setBorderColor
+            setBorderColor if @border == 'color'
          end
-      else # NSTextField
+      else # NSTextField or NSComboBox
+         textField = (@accessory.class == NSTextField)
          case @border
          when 'none'
-            @accessory.bordered = false
+            textField ? @accessory.bordered = false : @accessory.buttonBordered = false
             @accessory.bezeled = false
-         when 'line'
-            @accessory.bordered = true
-         when 'color'
-            @accessory.bordered = true
-            setBorderColor
+         when 'line', 'color'
+            textField ? @accessory.bordered = false : @accessory.buttonBordered = false
+            setBorderColor if @border == 'color'
          end
       end
    end
 
 
+   # Set the accessory border color.
    def setBorderColor
+      return if @coloration[:border].nil?
       ciColor = CIColor.alloc.initWithColor(MEalert.getColor(@coloration[:border]))
       cgColor = CGColorCreate(ciColor.colorSpace, ciColor.components)
       @accessory.wantsLayer = true

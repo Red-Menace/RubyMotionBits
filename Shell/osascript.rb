@@ -5,7 +5,7 @@
 # Returns an array consisting of an error flag and the result/error text
 def osascript(script)
    result = `osascript -s o -e '#{script}'`.chomp  # get the result (or error message)
-   error = $?.exitstatus == 0  # set error flag
+   error = $?.exitstatus != 0  # set error flag
    [error, result]
 end
 

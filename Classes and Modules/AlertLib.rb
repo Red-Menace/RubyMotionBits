@@ -1,8 +1,8 @@
 #
 # AlertLib - a library for creating NSAlert modal dialogs
 #
-# Created by Red_Menace on 07-22-17, last updated/reviewed on 12-05-19
-# Copyright (c) 2017-2019 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
+# Created by Red_Menace on 07-22-17, last updated/reviewed on 11-12-22
+# Copyright (c) 2017-2022 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -194,12 +194,12 @@ class MEalert
             end
          end
          if preset.call(theColor) == 'box'  # box fill color doesn't have a system color
-            dark = !NSAppearance.currentAppearance.name.to_s.index('DarkAqua').nil?
+            dark = !NSAppearance.currentAppearance.name.to_s.index('Dark').nil?
             rgb = dark ? [0.12, 0.12, 0.12] : [0.89, 0.89, 0.89]
          else  # get the specified color or default - no dark mode swaps are performed
             rgb = COLORS[preset.call(default)] if (rgb = COLORS[theColor]).nil?
          end
-         rgb = [128, 128, 128] if rgb.nil?
+         rgb = [0.5, 0.5, 0.5] if rgb.nil?   # get gray if nothing else has worked
          NSColor.colorWithSRGBRed( rgb[0],
                             green: rgb[1],
                              blue: rgb[2],
@@ -268,8 +268,8 @@ class MEalert
 
 
    # (re)set the alert's message text and font
-   # Note that although this textField can't actually be nil, setting the messageText to
-   # nil sets the font to a very small size (such as 0.25), which hides it fairly well.
+   # Note that although this textField cannot be nil, setting messageText to nil
+   # sets the font to a very small size (such as 0.25), which hides it fairly well.
    def message(messageText, messageFont = nil)
       messageFont = NSFont.boldSystemFontOfSize(0.25) if messageText.nil?
       @alert.window.contentView.subviews[4].font = messageFont unless messageFont.nil?
@@ -288,24 +288,25 @@ class MEalert
 
 
    # (re)set the alert icon
-   # Can be the styles 'informational', 'warning', 'critical', the system alert icons
-   # 'note', 'caution', 'stop', other system icons 'info', 'tools', 'delete', 'question',
+   # Can be the styles 'informational', 'warning', 'critical', select system icons,
    # or an image file path.
-   # Note that NSAlert will use the application icon if a valid icon is not specified.
+   # Note that the application icon will be used if the specified icon is not valid.
    def icon(iconType)
       theFile = nil
       case type = iconType.to_s.downcase
       when 'critical'
-         @alert.alertStyle = NSCriticalAlertStyle
+         @alert.alertStyle = NSAlertStyleCritical
       when '', 'informational', 'warning'  # default application icon
-         @alert.alertStyle = NSInformationalAlertStyle  # NSWarningAlertStyle
-      when 'note', 'caution', 'stop'  # system alert icon
-         theFile = "#{RESOURCES}Alert#{type.capitalize}Icon.icns"
-      when 'info' then theFile = "#{RESOURCES}ToolbarInfo.icns"
+         @alert.alertStyle = NSAlertStyleInformational  # NSAlertStyleWarning
+      when 'note' then theFile = "#{RESOURCES}AlertNoteIcon.icns"
+      when 'stop' then theFile = "#{RESOURCES}AlertStopIcon.icns"
+      when 'general' then theFile = "#{RESOURCES}General.icns"
+      when 'question' then theFile = "#{RESOURCES}GenericQuestionMarkIcon.icns"
+      when 'gear' then theFile = "#{RESOURCES}ToolbarAdvanced.icns"
       when 'tools' then theFile = "#{RESOURCES}ToolbarCustomizeIcon.icns"
       when 'delete' then theFile = "#{RESOURCES}ToolbarDeleteIcon.icns"
-      when 'question' then theFile = "#{RESOURCES}GenericQuestionMarkIcon.icns"
-      else  theFile = iconType.to_s unless iconType.nil?
+      when 'info' then theFile = "#{RESOURCES}ToolbarInfo.icns"
+      else theFile = iconType.to_s unless type == ''
       end
       unless theFile.nil?
          candidate = NSImage.alloc.initByReferencingFile(theFile)
@@ -315,14 +316,17 @@ class MEalert
    alias icon= icon
 
 
-   # Specify an array of buttons (left-to-right), subject to display size.
+   # Create buttons from an array of names (left-to-right, bottom-to-top).
    # The parameter 'default' specifies the default button (index).
-   # The leftmost button will have the initial focus.
+   # Button names ending with a newline will have the hasDestructiveAction property set.
+   # The leftmost or bottom button will have the initial focus.
    def buttons(buttonArray, default = true)
       return if (buttonArray = filterList(buttonArray)).empty? || !@buttonList.empty?
       theButton = nil
-      buttonArray.reverse.each do |aButton|  # buttons added right-to-left
-         theButton = @alert.addButtonWithTitle(aButton = aButton.to_s)
+      buttonArray.reverse.each do |aButton|  # buttons added right-to-left, top-to-bottom
+         destructive = aButton.chomp!  # newline?
+         theButton = @alert.addButtonWithTitle(aButton)
+         theButton.hasDestructiveAction = true if !destructive.nil? && theButton.respondsToSelector("hasDestructiveAction")
          @buttonList << aButton
          unless default == true  # normal focus, default index as specified
             theButton.keyEquivalent = '' unless aButton == 'Cancel'
@@ -342,10 +346,10 @@ class MEalert
                                .tap do |obj|  # origin will be set later
          obj.bordered = false
          obj.drawsBackground = false
-         obj.font = NSFont.fontWithName('Menlo Bold', size: 14)  # mono-spaced
+         obj.font = NSFont.fontWithName('Menlo Bold', size: 12)  # mono-spaced
          obj.editable = false
          obj.selectable = false
-         obj.alignment = NSCenterTextAlignment
+         obj.alignment = NSTextAlignmentCenter
          obj.toolTip = 'time remaining'
       end unless defined?(@timerField)
    end
@@ -418,7 +422,7 @@ class MEalert
 
    # (re)set the text color to one of the preset names
    # Text color for the message and informational label fields can also be set by
-   # including a target, e.g. ('blue', 'message'), otherwise the accessory is used.
+   # including a target ('message', 'informative'), otherwise the accessory is used.
    def textColor(theColor, target = nil)
       return if theColor.nil?
       views = @alert.window.contentView.subviews  # the standard label fields
@@ -468,7 +472,7 @@ class MEalert
 
 
    # Set the accessory border style.
-   # Can be 'line', 'none', or 'color', otherwise the default is used.
+   # Can be 'line', 'color', or 'none', otherwise the default is used.
    def border(borderStyle)
       @border = borderStyle.nil? ? nil : borderStyle.to_s.downcase
    end
@@ -510,15 +514,15 @@ class MEalert
                                     target: self,
                                   selector: 'updateCountdown:',
                                   userInfo: nil,
-                                   repeats: true)
+                                   repeats: true )
                     .tap do |timer|
          @countdown = @delayTime
          @timerField.stringValue = @countdown.to_int.to_s
       end if @delayTime > 1
       nil
    end
-   
-   
+
+
    # Update the countdown timer display.
    def updateCountdown(timer)
       @countdown -= 1
@@ -554,13 +558,15 @@ class MEalert
    # after the first one for radiobutton items, and ignored when matching checkbox items.
    def filterList(input)
       set = false
-      Array(input).each_with_object([]) do |item, output|
+      [*input].each_with_object([]) do |item, output|
         item = item.to_s
-        item = item.chomp if (@accessoryType == 'combobox') || (@accessoryType == 'radiobutton' && set)
+        item = item.chomp if (@accessoryType == 'combobox') ||
+                             (@accessoryType == 'radiobutton' && set)
         set = true if item.end_with?("\n")
         output << item unless item.empty? || (output & [item, "#{item}\n"]).any?
       end
    end
+
    
    ##################################################
    #  #mark ――― Accessory View Creation ―――
@@ -579,10 +585,10 @@ class MEalert
       when 'checkbox' then buttonAccessory(width, MAX_HEIGHT, false)
       when 'radiobutton' then buttonAccessory(width, MAX_HEIGHT, true)
       end
-      if @delayTime > 1
-         @alert.layout  # get new layout
-         offset = @alert.window.frame.size.height - 130
-         @timerField.frameOrigin = [37, offset]
+      if @delayTime > 1  # set timerField origin
+         @alert.layout  # get accessorized layout
+         spot = @alert.window.contentView.subviews[0].frame.origin  # icon
+         @timerField.frameOrigin = [spot.x + 12, spot.y - 18]
          @alert.window.contentView.addSubview(@timerField)
       end
    end
@@ -597,10 +603,10 @@ class MEalert
                             .alloc.initWithFrame([[0, 0], [width, height]])
                             .tap do |text|
          text.font = NSFont.fontWithName('Menlo', size: 13)  # monospaced
-         text.refusesFirstResponder = true
       end
       updateAccessory
-      @accessory.frameSize = @accessory.cell.cellSizeForBounds([[0, 0], [width, height]])
+      @accessory.frameSize = @accessory.cell
+                                       .cellSizeForBounds([[0, 0], [width, height]])
                                        .tap do |obj|
          obj.height = @dimensions[:height] unless @dimensions[:height].nil?
          if @dimensions[:width].nil?
@@ -619,7 +625,8 @@ class MEalert
    # dialog width).
    def comboBoxAccessory(width, height)
       return if (menuList = filterList(@input)).empty?
-      @accessory = NSComboBox.alloc.initWithFrame([[0, 0], [width, height]])
+      @accessory = NSComboBox.alloc
+                             .initWithFrame([[0, 0], [width, height]])
                              .tap do |combo|
          combo.completes = true
          combo.cell.lineBreakMode = 5  # NSLineBreakByTruncatingMiddle
@@ -628,7 +635,7 @@ class MEalert
          comboWidth = width
          combo.toolTip = @labels.to_s
          menuList.each_with_index do |item, index|
-            combo.addItemWithObjectValue(item)
+            combo.addItemWithObjectValue(item.chomp)
             if @dimensions[:width].nil?
                combo.stringValue = item
                combo.sizeToFit  # kludge to get max width when auto-sizing
@@ -648,11 +655,11 @@ class MEalert
    # Make a checkBox or radioButton accessoryView - the width will use the specified setting
    # or auto-adjust for the longest input item (the width will not be smaller than the
    # dialog width), and the height will always auto-adjust for the number of items.
-   # Input items ending with a newline will be set/checked (button title is chomped).
    def buttonAccessory(width, height, radio = false)
       return if (buttonList = filterList(@input)).empty?
       height = buttonList.length * BUTTON_HEIGHT
-      @accessory = NSBox.alloc.initWithFrame([[0, 0], [width, height + PADDING]])
+      @accessory = NSBox.alloc
+                        .initWithFrame([[0, 0], [width, height]])
                         .tap do |box|
          box.titlePosition = 0
          buttonWidth = width
@@ -675,6 +682,7 @@ class MEalert
    
    
    # Make an individual button for the buttonAccessory.
+   # Button titles ending with a newline will be set/checked (button title is chomped).
    def makeButton(radio, item)
       if radio
          NSButton.radioButtonWithTitle('', target: self, action: 'buttonAction:')
@@ -682,11 +690,8 @@ class MEalert
          NSButton.checkboxWithTitle('', target: self, action: 'buttonAction:')
       end.tap do |button|
          button.lineBreakMode = 5  # NSLineBreakByTruncatingMiddle
-         if item.end_with?("\n")  # set/check
-            button.state = NSOnState  # NSControlStateValueOn
-            item = item.chomp
-         end
-         button.title = item
+         button.state = NSOnState if item.end_with?("\n")  # NSControlStateValueOn
+         button.title = item.chomp
       end
    end
 

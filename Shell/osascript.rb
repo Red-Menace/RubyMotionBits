@@ -31,3 +31,19 @@ def osascript(script, *args)
    [$?.exitstatus != 0, `osascript -s o -e '#{script}'#{arguments}`[0..-2]]
 end
 
+
+# Run an AppleScript via NSAppleScript.
+# Returns an array consisting of an error boolean and the result string.
+def runNSAppleScript(script)
+   result = NSAppleScript.alloc
+                         .initWithSource(script)
+                         .executeAndReturnError(errorPtr = Pointer.new(:object))
+   if result
+      return [false, result.stringValue]
+   else
+      errMess, errNum = errorPtr[0].values_at('NSAppleScriptErrorMessage',
+                                              'NSAppleScriptErrorNumber')
+      return [true, "Error: #{errMess}  (#{errNum})"]
+   end
+end
+

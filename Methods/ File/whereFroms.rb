@@ -2,12 +2,12 @@
 # Add a whereFrom to beginning of the list - default text is the current item path.
 # The list is trimmed after the item is added (duplicates are moved to the beginning).
 # Spotlight may take a moment to update.
-def addWhereFrom(posixPath)
+def addWhereFrom(posixPath, entry)
    max = 5  # maximum number of items
    existing = readWhereFroms(posixPath)
-   index = existing.index(entry[:reply])  # duplicate?
+   index = existing.index(entry)  # duplicate?
    newList = existing.delete_at(index) if index
-   newList = existing.unshift(entry[:reply])  # add to beginning
+   newList = existing.unshift(entry)  # add to beginning
    writeWhereFroms(posixPath, newList.first(max))  # trim to maximum number of items
 end
 

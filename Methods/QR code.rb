@@ -23,7 +23,7 @@
    def readQRcode(inputFile)
       fileURL = NSURL.fileURLWithPath(inputFile)
       image = CIImage.imageWithContentsOfURL(fileURL)
-      if (image = CIImage.imageWithContentsOfURL(fileURL))
+      if image
          options = {CIDetectorAccuracy: 'CIDetectorAccuracyHigh'}
          detector = CIDetector.detectorOfType( 'CIDetectorTypeQRCode',
                                       context: nil,

@@ -1,8 +1,8 @@
 #
 # AlertLib - a library for creating NSAlert modal dialogs
 #
-# Created by Red_Menace on 07-22-17, last updated/reviewed on 11-12-22
-# Copyright (c) 2017-2022 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
+# Created by Red_Menace on 07-22-17, last updated/reviewed on 02-03-24
+# Copyright (c) 2017-2024 Menace Enterprises, red_menace|at|menace-enterprises|dot|com
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -258,8 +258,8 @@ class MEalert
       { button: response, reply: response == 'Cancel' ? nil : answer }
    end
    alias show display
-   
-   
+
+
    # (re)set the alert window title
    def title(titleText)
       @alert.window.title = titleText.to_s
@@ -288,25 +288,23 @@ class MEalert
 
 
    # (re)set the alert icon
-   # Can be the styles 'informational', 'warning', 'critical', select system icons,
+   # Can be the styles 'critical', 'informational', 'warning', the system alert icons
+   # 'note', 'stop', other system icons 'caution', 'info', 'tools', 'delete', 'question',
    # or an image file path.
    # Note that the application icon will be used if the specified icon is not valid.
    def icon(iconType)
       theFile = nil
       case type = iconType.to_s.downcase
-      when 'critical'
-         @alert.alertStyle = NSAlertStyleCritical
+      when 'critical' then @alert.alertStyle = NSAlertStyleCritical
       when '', 'informational', 'warning'  # default application icon
          @alert.alertStyle = NSAlertStyleInformational  # NSAlertStyleWarning
-      when 'note' then theFile = "#{RESOURCES}AlertNoteIcon.icns"
-      when 'stop' then theFile = "#{RESOURCES}AlertStopIcon.icns"
-      when 'general' then theFile = "#{RESOURCES}General.icns"
-      when 'question' then theFile = "#{RESOURCES}GenericQuestionMarkIcon.icns"
-      when 'gear' then theFile = "#{RESOURCES}ToolbarAdvanced.icns"
+      when 'note', 'stop' then theFile = "#{RESOURCES}Alert#{type.capitalize}Icon.icns"
+      when 'caution' then @alert.icon = NSImage.imageNamed(NSImageNameCaution)
+      when 'info' then theFile = "#{RESOURCES}ToolbarInfo.icns"
       when 'tools' then theFile = "#{RESOURCES}ToolbarCustomizeIcon.icns"
       when 'delete' then theFile = "#{RESOURCES}ToolbarDeleteIcon.icns"
-      when 'info' then theFile = "#{RESOURCES}ToolbarInfo.icns"
-      else theFile = iconType.to_s unless type == ''
+      when 'question' then theFile = "#{RESOURCES}GenericQuestionMarkIcon.icns"
+      else  theFile = iconType.to_s unless iconType.nil?
       end
       unless theFile.nil?
          candidate = NSImage.alloc.initByReferencingFile(theFile)
@@ -361,7 +359,7 @@ class MEalert
       @sheet = (flag == true)
    end
    alias sheet= sheet
-   
+
 
    # (re)set the alert help button.
    # The help message and info will be displayed in a sheet over the original alert.
@@ -372,7 +370,7 @@ class MEalert
    end
    alias help= help
 
-   
+
    ##################################################
    #  #mark ――― Alert Delegate Methods ―――
    ##################################################
@@ -402,8 +400,8 @@ class MEalert
       @accessoryType = type.nil? ? nil : type.to_s.downcase
    end
    alias accessory= accessory
-   
-   
+
+
    # (re)set the accessory default input items or text
    # Can be a string or an array of strings.
    def input(inputItem)
@@ -447,8 +445,8 @@ class MEalert
       end
    end
    alias backgroundColor= backgroundColor
-   
-   
+
+
    # (re)set the textField/box border color
    def borderColor(theColor)
       return if theColor.nil?
@@ -541,8 +539,8 @@ class MEalert
       response = @sheet && NSApp.mainWindow ? @alert.runModalSheet : @alert.runModal
       response < 0 ? 'gave up' : @buttonList[response - 1000]
    end
-   
-   
+
+
    # Update the accessory textField.
    def updateAccessory
       @accessory.stringValue = @input.to_s unless @input.nil?
@@ -551,8 +549,8 @@ class MEalert
       @accessory.textColor = MEalert.getColor(@coloration[:text], 'textColor')
       @accessory.backgroundColor = MEalert.getColor(@coloration[:background], 'backgroundColor')
    end
-   
-   
+
+
    # Filter a list for blanks and duplicates.
    # Trailing newlines (indicating set/checked) are chomped for combobox items, chomped
    # after the first one for radiobutton items, and ignored when matching checkbox items.
@@ -567,7 +565,7 @@ class MEalert
       end
    end
 
-   
+
    ##################################################
    #  #mark ――― Accessory View Creation ―――
    ##################################################
@@ -592,8 +590,8 @@ class MEalert
          @alert.window.contentView.addSubview(@timerField)
       end
    end
-   
-   
+
+
    # Make a textField accessoryView.
    # The size will auto-adjust for the contents or use the specified height
    # and width settings (the width will not be smaller than the dialog width).
@@ -618,8 +616,8 @@ class MEalert
       setBorder
       @alert.accessoryView = @accessory 
    end
-   
-   
+
+
    # Make a comboBox accessoryView - the width will use the specified setting or
    # auto-adjust for the longest input item (the width will not be smaller than the
    # dialog width).
@@ -650,8 +648,8 @@ class MEalert
       setBorder
       @alert.accessoryView = @accessory
    end
-      
-   
+
+
    # Make a checkBox or radioButton accessoryView - the width will use the specified setting
    # or auto-adjust for the longest input item (the width will not be smaller than the
    # dialog width), and the height will always auto-adjust for the number of items.
@@ -679,8 +677,8 @@ class MEalert
       setBorder
       @alert.accessoryView = @accessory
    end
-   
-   
+
+
    # Make an individual button for the buttonAccessory.
    # Button titles ending with a newline will be set/checked (button title is chomped).
    def makeButton(radio, item)
@@ -735,10 +733,8 @@ class MEalert
    # Set the accessory border color.
    def setBorderColor
       return if @coloration[:border].nil?
-      ciColor = CIColor.alloc.initWithColor(MEalert.getColor(@coloration[:border]))
-      cgColor = CGColorCreate(ciColor.colorSpace, ciColor.components)
       @accessory.wantsLayer = true
-      @accessory.layer.borderColor = cgColor
+      @accessory.layer.borderColor = MEalert.getColor(@coloration[:border]).CGColor  # QuartzCore
       @accessory.layer.borderWidth = 1
    end
 

@@ -1,8 +1,6 @@
-<<<<<<< HEAD
+
+
 = RubyMotion 9.6 (Sep 2024) =
-=======
-= RubyMotion 9.6 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
   * [Xcode] Added support for Xcode 16.0 RC.
   * [Xcode] Added support for Xcode 16.1 Beta.
   * [Android] Dropped support for SDK version less than 26.
@@ -22,21 +20,23 @@
    # required api target for distribution on GooglePlay
    app.target_api_version = '34'
    ```
+   
+   
 = RubyMotion 9.5 =
   * [Xcode] Added support for Xcode 16.0 Beta.
 
-<<<<<<< HEAD
+
 = RubyMotion 9.4 (May 2024) =
-=======
-= RubyMotion 9.4 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
   * [Xcode] Added support for Xcode 15.3.
+
 
 = RubyMotion 9.3 =
   * [Xcode] Added support for Xcode 15.3.
 
+
 = RubyMotion 9.2 =
   * [Xcode] Added support for Xcode 15.0.1, 15.1, 15.2.
+
 
 = RubyMotion 9.1 =
   * [Xcode] Added support for Xcode 15.0 and 15.1 beta.
@@ -64,11 +64,8 @@
   - Apps targeting iOS 17.0 and MacOS 14.0 can be distributed to production, dev builds to device will install to device, but repl will not connect.
   - Repl will connect on the Simulator using Xcode 14.3.1, but standard-in will not be accepted on Sonoma (though console out will be shown).
 
-<<<<<<< HEAD
+
 = RubyMotion 9.0 (Sep 2023) =
-=======
-= RubyMotion 9.0 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
   * [iOS] Apps that leverage the MessagesUI framework have a collision with the Complex
     numeric type in RubyMotion. This type has been removed so as not to clash with
     iOS 17. If you're app uses MessagesUI, release a production build to avoid crashes
@@ -78,37 +75,46 @@
   * [Pending] Fixes for the interaction with Xcode 15.0's repl and developer devices is still
     in the works. Please use Xcode 14.3.1 for now.
 
+
 = RubyMotion 8.18 =
   * [Xcode] Added support for Xcode 15 beta 5.
   * [BridgeSupport] Updated BridgeSupport binary to be universal.
 
+
 = RubyMotion 8.17 =
   * [MacOS] Re-enabled Universal Binaries.
+
 
 = RubyMotion 8.16 =
   * [Repl] Arm64 support added to repl.
   * [Repl] Fixed issues with detecting deviced connected via USB.
 
+
 = RubyMotion 8.15 =
   * [BridgeSupport] Arm64 support added to BridgeSupport.
   * [Repl] Dependency on libimobiledevice upgraded to latest version.
 
+
 = RubyMotion 8.14 =
   * [Repl] Repl dependencies no longer rely on what's installed via brew.
+
 
 = RubyMotion 8.13 =
   * [Xcode] Added support for Xcode 14.3.1
   * [Starter] Bug fix for Starter License default SDK
+
 
 = RubyMotion 8.12 =
   * [Xcode] Added support for Xcode 14.3.
   * [MacOS] Added support for MacOS 13.3.
   * [iOS] Added support for iOS 16.4.
 
+
 = RubyMotion 8.9 =
   * [Xcode] Added support for Xcode 14.2.
   * [MacOS] Added support for MacOS 13.1.
   * [iOS] Added support for iOS 16.2.
+
 
 = RubyMotion 8.8 =
   * [MacOS] Added support for MacOS 13.0.
@@ -123,26 +129,24 @@
     to an API version that has wider adoption (the recommended value
     is `app.api_version = '26'`).
 
+
 = RubyMotion 8.7 =
   * [Xcode] Added support for Xcode 14.1 Beta 3 and iOS 16.1.
+
 
 = RubyMotion 8.6 =
   * [Xcode] Added support for Xcode 14.0.
 
+
 = RubyMotion 8.5 =
   * [Xcode] Added support for Xcode 14.0 Release Candiate.
 
-<<<<<<< HEAD
+
 = RubyMotion 8.4 (May 2022) =
   * [Xcode] Added support for Xcode 13.4.
 
-= RubyMotion 8.3 (Apr 2022) =
-=======
-= RubyMotion 8.4 =
-  * [Xcode] Added support for Xcode 13.4.
 
-= RubyMotion 8.3 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
+= RubyMotion 8.3 (Apr 2022) =
   * [MacOS] Added support for MacOS 12.3.
   * [MacOS] Added support for Universal Binaries.
     IMPORTANT:
@@ -167,6 +171,7 @@
       require 'motion/project/template/osx'
       ```
 
+
 = RubyMotion 8.2 =
   * [Xcode] Added support for Xcode 13.3.
   * [Android] Legacy SDKs available to compile against.
@@ -182,17 +187,13 @@
     end
   * [MacOS] RubyMotion kernel has been created for both x86 and arm64: kernel-arm64.bc, kernel-x86_64.bc (updates to MacOS rake tasks pending).
 
-= RubyMotion 8.1 =
 
+= RubyMotion 8.1 =
   * [Xcode] Added support for Xcode 13.2.1.
   * [Bugfix] Repl for iOS simulator fixed.
 
-<<<<<<< HEAD
-= RubyMotion 8.0 (Dec 2021) =
-=======
-= RubyMotion 8.0 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 8.0 (Dec 2021) =
   * [LLVM] RubyMotion compiler upgraded to LLVM Version 10.0. This is a big upgrade to the
     compiler. Please let us know if you hit any issues.
   * [Android] Added support for Android API 30. As of November 2021 Google has deprecated all SDK
@@ -203,64 +204,48 @@
     https://developer.android.com/studio/build/building-cmdline#build_bundle for help in manually creating
     an app bundle.
 
-<<<<<<< HEAD
-= RubyMotion 7.22 (Oct 2021) =
-=======
-= RubyMotion 7.22 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 7.22 (Oct 2021) =
   * [Xcode] Added support for Xcode 13.0.
   * [Known Issues] Repl + Device running iOS 15.0 works for valid ruby commands (we are still working
     through crashes related to invalid Ruby/exceptions). Repl issues still exist for running with the
     simulator, but the incremental fix for device centric repl is worth releasing.
 
-= RubyMotion 7.21 =
 
+= RubyMotion 7.21 =
   * [Xcode Beta] Added support for Xcode 13.0 Beta 5 (this is for Indie and Pro Licenses Only).
 
-= RubyMotion 7.20 =
 
+= RubyMotion 7.20 =
   * [Xcode] Backtrace now also considers the case when `DW_AT_ranges`
     is present instead of DW_AT_hipc. For more information about the
     DWARF Standard, see: http://dwarfstd.org/
 
-= RubyMotion 7.19 =
 
+= RubyMotion 7.19 =
   * [Xcode] Fixed backtrace issue related to Xcode 12.0+. Issue is related to
     Xcode 12.0 adding debug information partitioned by DWARF compilation units that
     overlap the same address space. These overlapping address spaces are now taken
     into consideration for determining the correct location of an exception.
 
-<<<<<<< HEAD
-= RubyMotion 7.18 (Apr 2021) =
-=======
-= RubyMotion 7.18 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 7.18 (Apr 2021) =
   * [Xcode] Added support for Xcode 12.5.
 
-= RubyMotion 7.17 =
 
+= RubyMotion 7.17 =
   * [Bugfix] [OSX] Fixes added for deployment target 11.+.
   * [OSS] Be sure to run `motion repo` for fixes related to `OBJC_DISABLE_INITIALIZE_FORK_SAFETY`.
   * [Bugfix] Fixes added for `rake debug=1`.
 
-<<<<<<< HEAD
-= RubyMotion 7.16 (Feb 2021) =
-=======
-= RubyMotion 7.16 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 7.16 (Feb 2021) =
   * [Important] [Bugfix] Bugfix for generating 64-bit BridgeSupport files on Big Sur.
   * [Bugfix] MacOS 10.14 SDK target fixed.
   * [Xcode] Added support for Xcode 12.4.
 
-<<<<<<< HEAD
-= RubyMotion 7.15 (Jan 2021) =
-=======
-= RubyMotion 7.15 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 7.15 (Jan 2021) =
   * [Big Sur] Supported added for MacOS 11.0.
   * [Xcode] Added support for Xcode 12.3.
   * [rubymotion-template] Added updates so that Swift Runtime libraries are no longer required to run the repl.
@@ -290,47 +275,39 @@
        ```
     6. Come to the [RubyMotion Slack Channel](http://slack.rubymotion.com) if you hit any snags. Happy new years everyone!
 
-<<<<<<< HEAD
-= RubyMotion 7.14 (Dec 2020) =
-=======
-= RubyMotion 7.14 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 7.14 (Dec 2020) =
   * Compiler updates in preparation for Apple Silicon and Big Sur.
   * [Xcode] Added Support for Xcode 12.2.
   * [Xcode] Added Support for Xcode 12.1.1.
   * [Xcode Beta] Added Support for Xcode 12.3 Beta 3.
 
-= RubyMotion 7.13 =
 
+= RubyMotion 7.13 =
   * [Xcode] Added support for Xcode 12.1.1 Release Candidate.
   * [Xcode] Added support for Xcode 12.2 Release Candiate.
 
-= RubyMotion 7.12 =
 
+= RubyMotion 7.12 =
   * [Xcode] Added support for Xcode 12.1 GM (Which includes simulators for new devices).
   * [Xcode] Added support for Xcode 12.2 Beta 3.
 
-<<<<<<< HEAD
-= RubyMotion 7.11 (Sep 2020) =
-=======
-= RubyMotion 7.11 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 7.11 (Sep 2020) =
   * [Xcode] Added support for Xcode 12.2 Beta.
 
-= RubyMotion 7.10 =
 
+= RubyMotion 7.10 =
   * [Xcode] Added support for Xcode 12.0 GM.
   * [BridgeSupport] BridgeSupport files for MacOS 11.0 generated based off of Xcode 12.0 GM.
 
-= RubyMotion 7.9 =
 
+= RubyMotion 7.9 =
   * [Bugfix] Fixed BridgeSupport files for Xcode 11.7. You can see the new metadata in
     /Library/RubyMotion/data/.
 
-= RubyMotion 7.8 =
 
+= RubyMotion 7.8 =
   * [Xcode Beta] Added support for Xcode 12.0 (Beta 6) running on macOS Catalina. This is only
     for Indie and Pro subscriptions.
 
@@ -340,15 +317,15 @@
 
   * NOTE: Change log for 7.6 updated with more information about using `Pointer`.
 
-= RubyMotion 7.7 =
 
+= RubyMotion 7.7 =
   * [Xcode Beta] Added support for Xcode 12.0 (Beta 5) running on macOS Catalina. This is only
     for Indie and Pro subscriptions.
 
   * NOTE: Change log for 7.6 updated with more information about using `Pointer`.
 
-= RubyMotion 7.6 =
 
+= RubyMotion 7.6 =
   * [Xcode] Added support for Xcode 11.6.
 
   * [Bugfix] `Pointer.new` top level retain behavior has been reverted. If you were having crashes
@@ -453,8 +430,8 @@
     for Indie and Pro subscriptions. Big Sur plus Apple Silicon support will be released
     at a future date. Come to the Slack channel for updates: http://slack.rubymotion.com.
 
-= RubyMotion 7.5 =
 
+= RubyMotion 7.5 =
   * [Bugfix] `Pointer.new` was leaking a small amount of memory with every instance
     creation and is noticeable after a few thousand constructions. This has been resolved.
     With this change, you cannot hold onto a `Pointer` type within an iVar. Instead of
@@ -483,24 +460,24 @@
 
   * [Xcode] Added support for Xcode 11.5.
 
-= RubyMotion 7.4 =
 
+= RubyMotion 7.4 =
   * [Bugfix] Added missing BridgeSupport metadata files for iOS 11.4.
 
-= RubyMotion 7.3 =
 
+= RubyMotion 7.3 =
   * [Xcode] Added Support for Xcode 11.4.
   * [Known Isssues] We are working on creating a cross platform repl. As
     a work around for NSLog, open Xcode->Windows->Device And Simuators. From
     there, you can open the console for your device and see NSLog statements.
   * [News] New DragonRuby website should launch by the end of April.
 
-= RubyMotion 7.2 =
 
+= RubyMotion 7.2 =
   * [Xcode] Added Support for Xcode 11.3.1.
 
-= RubyMotion 7.1 =
 
+= RubyMotion 7.1 =
   * [MacOSX] [Bugfix] Fix BridgeSupport files associated with MacOSX 10.13.
   * [Known Issues] Repl does not relay NSLog statements. This is currently
     being worked on and a fix will release soon.
@@ -512,12 +489,8 @@
     straightforward to install and the theme options that are provided out of the box have
     really nice PS1 formatting/git status information.
 
-<<<<<<< HEAD
-= RubyMotion 7.0 (Dec 2019) =
-=======
-= RubyMotion 7.0 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 7.0 (Dec 2019) =
   * [MacOSX] Added Support for MacOS Catalina.
   * [Bugfix] Repl has been fixed and can now connect to iOS 13 devices.
     We are still working on a fix for repl interaction with devices that
@@ -613,8 +586,8 @@
           PROMPT="┌── [ %~ ${vcs_info_msg_0_}]${NEWLINE}+-> "
           ```
 
-= RubyMotion 6.5 =
 
+= RubyMotion 6.5 =
   * [Xcode] Added support for Xcode 11.2.
   * [Known Issues] The repl attachment against iOS 13 devices is currently not working. A fix is
     in the works for this. The repl should still attach to the Simulator.
@@ -629,31 +602,23 @@
     Catalina. And then "immediately" afterwards, a RubyMotion 7.0 release which WILL work with Mojave.
     RM 7.0 will drop all support for 32 bit including dropping support for MacOS Maverick (10.9).
 
-= RubyMotion 6.4 =
 
+= RubyMotion 6.4 =
   * [Xcode] Added support for Xcode 11.1.
   * [Bugfix] Cycle detection was resulting in unrooted/prematurely GC'ed Ruby objects.
   * [Known Issues] The repl attachment against iOS 13 devices is currently not working. A fix is in the works for this.
     The repl should still attach to the Simulator.
 
-<<<<<<< HEAD
-= RubyMotion 6.3 (Sep 2019) =
-=======
-= RubyMotion 6.3 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 6.3 (Sep 2019) =
   * [Android] Updated NDK to r15c allowing us to use LLVM 5.0. Run `motion android-setup` to install the new NDK.
   * [Android] The default Android target has been upgraded to API 28 for both Pro, Indie and Starter License.
   * [Xcode] Added support for Xcode 11.0 and Xcode 11.1 GM.
   * [Known Issues] The repl attachment against iOS 13 devices is currently not working. A fix is in the works for this.
     The repl should still attach to the Simulator.
 
-<<<<<<< HEAD
-= RubyMotion 6.2 (Jul 2019) =
-=======
-= RubyMotion 6.2 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 6.2 (Jul 2019) =
   * [Xcode] Support for Xcode 10.3 added.
   * [iOS, tvOS, WatchOS] Retroactively added deprecated 64 bit SDKs given requests from the community
     to bring back the ability to compile legacy apps.
@@ -667,8 +632,8 @@
     on github/amirrajan/rubymotion-templates. Feel free to contribute.
   * [News] RubyMotion's Community Channel is close to breaking 1,000 members (it has nearly doubled) :-)
 
-= RubyMotion 6.1 =
 
+= RubyMotion 6.1 =
   * [Android] LLVM Compiler regressions for Android have been patched to fix compilation
     issues up to API version 27. NDK Version r19c, LLVM 5.0, and Android 28 support is coming.
   * [Android] The default Android target has been upgraded to API 27 for both Pro, Indie and Starter License.
@@ -677,12 +642,8 @@
   * [Android] If you are on the Pro/Indie License and are working on a *new* Android app,
     it's strongly recommended that you target API 26.
 
-<<<<<<< HEAD
-= RubyMotion 6.0 (Apr 2019) =
-=======
-= RubyMotion 6.0 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 6.0 (Apr 2019) =
   * This is a major release of RubyMotion. Please read the change log carefully.
     Come to the Slack channel if you need any help: http://slack.rubymotion.com.
   * [Important] [News] Amir Rajan, owner of RubyMotion has brought on two partners to help in the
@@ -767,12 +728,8 @@
     6. After changing the Rakefile. Perform a full clean, followed by a rebuild: `rake clean:all default`.
     7. If you run into any issues. Come to the Slack Channel: http://slack.rubymotion.com.
 
-<<<<<<< HEAD
-= RubyMotion 5.17 (Feb 2019) =
-=======
-= RubyMotion 5.17 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 5.17 (Feb 2019) =
   * [Important] [SemVer] Xcode 10.2 *requires* Mojave. This is the final release of RubyMotion that will support Sierra, and High Sierra.
 
     If you want to continue using Sierra/High Sierra. Do not upgrade your Mac OS, Xcode (10.1), or RubyMotion (5.17) past this point.
@@ -1008,16 +965,16 @@
     dirty. I promise. I (and by extension RubyMotion's subscription income) am here to help you reach the next level. Please help spread
     the narrative of "if you find X useful, bring it out of dormancy".
 
-= RubyMotion 5.16 =
 
+= RubyMotion 5.16 =
   * [Mojave] [BridgeSupport] [segfault] Disabling SIP on Mojave is not longer required. Nor is it
     necessary to pass in DYLD_LIBRARY_PATH.
   * [Starter Edition] Both MacOSX 10.13 and 10.14 are available for free. As Mojave adoption increases,
     10.13 will be removed from the Starter Edition and will require an Indie license if that's a platform
     you'd want to target.
 
-= RubyMotion 5.15 =
 
+= RubyMotion 5.15 =
   * [Xcode 10.1] Supported added for Xcode 10.1.
   * [Mojave] [BridgeSupport] [segfault] There is a pending bug submitted to Apple with
     regards to BridgeSupport, System Ruby, and changes to Mojave SIP (System Integrity Protection)
@@ -1028,13 +985,13 @@
 
     DYLD_LIBRARY_PATH=/System/Library/Frameworks/Ruby.framework/Versions/2.3/usr/lib rake
 
-= RubyMotion 5.14 =
 
+= RubyMotion 5.14 =
   * [Starter Edition] Added better help text to the Starter Edition for unsupported sdk versions. Be sure to also
     read the change log for RubyMotion 5.13.
 
-= RubyMotion 5.13 =
 
+= RubyMotion 5.13 =
   * [Xcode 10 GM] Support for Xcode 10 GM added. If you are using The Starter Edition of RubyMotion, you MUST download Xcode 10 GM from the
     Apple Developer Portal (the AppStore will not have the App). Go to: http://developer.apple.com/download.
 
@@ -1204,23 +1161,23 @@
     Long term support of the REPL will still be provided via RubyMotion
     given a paid subscription.
 
-= RubyMotion 5.12 =
 
+= RubyMotion 5.12 =
   * [Xcode Beta] Fix for cocoapods in Xcode 10. The symlink is no longer needed under
     `/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.13.xctoolchain`.
     `bin/gen_bridge_metadata` and `/Library/RubyMotion/lib/motion/project/xcode_config.rb` were updated
     to check for the existence of this directory and remove it.
 
-= RubyMotion 5.11 =
 
+= RubyMotion 5.11 =
   * [Xcode Beta] Xcode 10.0 Beta support added.
   * [motion repo] Better reminders of running `motion repo`.
   * [RubyMotion Starter Edition] Better error messages for unsupported SDKs in the starter edition.
   * [News] Be sure to check out Lori's new RubyMotion courses: https://wndx.school/
   * [News] RubyMotion is a Silver Sponser to Rails Girls Summer of Code.
 
-= RubyMotion 5.10 =
 
+= RubyMotion 5.10 =
   * [Note] This is small update.
   * [Xcode] Fixed regressions in OSX and Android template generation and build.
   * [OSS] Be sure to run `motion repo` to get fixes to template regresssions faster.
@@ -1233,8 +1190,8 @@
   * [Mojave] Work to support Mojave and iOS 12.0 has begun. Keep an eye on progress
     using the `motion pulse` command.
 
-= RubyMotion 5.9 =
 
+= RubyMotion 5.9 =
   * [News] RubyMotion one year recap (since I took over as CEO/Steward). Read here and share: http://www.rubymotion.com/news/2018/05/13/one-year-later.html
   * [Xcode] Xcode 9.4 support added.
   * [Xcode] [Important] [OSS] If you are using BubbleWrap, you will need to add `app.frameworks << "MobileCoreServices"` for compiling against 11.4.
@@ -1318,8 +1275,8 @@
 
     RubyMotion's future is bright :-)
 
-= RubyMotion 5.8 =
 
+= RubyMotion 5.8 =
   * [Community] The RubyMotion community forum has been rebooted. Please read about
     it here: [Hello World](http://community.rubymotion.com/t/hello-world-start-here/13?u=amirrajan)
   * [News] [RubyMotion's Guiding Principals](http://www.rubymotion.com/news/2018/02/12/rubymotion-guiding-principals.html)
@@ -1352,25 +1309,24 @@
 
 
 = RubyMotion 5.7 =
-
   * [RubyMotion Templates] Fixed regression in templates where templates hosted in a git repo stopped working.
   * [RubyMotion Templates] Added RUBYMOTION_OFFLINE environment variable if you don't want to synchronize templates or cli commands.
   * [Xcode] Xcode 9.3 beta support added.
 
-= RubyMotion 5.6 =
 
+= RubyMotion 5.6 =
   * [RubyMotion Templates] RubyMotion templates have been moved external to RM so that they can be updated outside of releases.
   * [RubyMotion Command] Machinery to support RubyMotion auxiliary commands has been added.
   * [Xcode] Xcode 9.2 (iOS 11.2 et al) support has been added.
   * [OSX] OSX 10.13 has been added to RubyMotion Starter Edition.
   * [News] Take a moment to read the following link and give me your thoughts: http://community.rubymotion.com/t/the-future-of-rubymotion/2227/5?u=amirrajan
 
-= RubyMotion 5.5 =
 
+= RubyMotion 5.5 =
   * [OSX, High Sierra BridgeSupport] Fixed macOS static constant generation (regeneration of BOTH 10.12 and 10.13 bridge support).
 
-= RubyMotion 5.4 =
 
+= RubyMotion 5.4 =
   * [Xcode] Support for Xcode 9.1 added, Xcode 9.2 beta support added.
   * [OSX, High Sierra BridgeSupport] Fixed macOS static constant generation.
   * [News] Be sure to join the Slack channel and say hello: http://motioneers.herokuapp.com/.
@@ -1382,20 +1338,20 @@
               for a patch to get sqlite working on High Sierra for iOS.
   * [Pending] motion-cocoapods + resources. Check github.com/amirrajan/rubymotion-applied for current workaround.
 
-= RubyMotion 5.3 =
 
+= RubyMotion 5.3 =
   * [Xcode] For High Sierra, be sure to download Xcode from
     developer.apple.com/download/more. Direct download link: https://download.developer.apple.com/Developer_Tools/Xcode_9/Xcode_9.xip
   * [Xcode] Fixes for BridgeSupport on High Sierra (working on
     removing the need for symlinks in the Xcode directory).
 
-= RubyMotion 5.2 =
 
+= RubyMotion 5.2 =
   * [Xcode] Xcode 9.1 beta support added.
   * [Xcode] Fixed issues with Cocoapods compiling against Xcode 9.0.
 
-= RubyMotion 5.1 =
 
+= RubyMotion 5.1 =
   * [MacOSX] High Sierra SDKs updated to RTM.
   * [MacOSX] BridgeSupport2 added for High Sierra.
   * [MacOSX] Symlink added to Xcode on High Sierra. If build fails,
@@ -1436,12 +1392,8 @@
   <enum name='NSAlertFirstButtonReturn' value='1000'/>
   ```
 
-<<<<<<< HEAD
-= RubyMotion 5.0 (Sep 2017) =
-=======
-= RubyMotion 5.0 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 5.0 (Sep 2017) =
   * [SemVer] 32 bit compilation has been removed. Use RM 4.22 and
     Xcode 8.3.3 to build 32 bit artifacts.
   * [SemVer] Xcode 9 GM is now the default Xcode. Make sure Xcode 9 GM is
@@ -1474,8 +1426,8 @@
     RubyMotion will come as soon as High Sierra goes GM.
   * Be sure to join the Slack channel: http://motioneers.herokuapp.com/
 
-= RubyMotion 4.22 =
 
+= RubyMotion 4.22 =
   * [iOS] Xcode Beta 5 Support added.
   * [iOS] Fixed missing `AVFoundation` missing enumerations for iOS 11.0.
 
@@ -1523,7 +1475,6 @@
   ```
 
 = RubyMotion 4.21 =
-
   * [iOS] Fixed crash of RubyMotion apps running on iOS 11.0 Beta 4.
   * [iOS] Deprecation notice for older iOS SDKs.
   * [Android] Deprecation notice for older Android SDKs.
@@ -1636,12 +1587,12 @@
   - Note: You an always use the `motion * update --cache-version=X.XX`
     command to download an older version of RubyMotion.
 
-= RubyMotion 4.20 =
 
+= RubyMotion 4.20 =
   * [iOS, OSX, watchOS, tvOS] Added support for Xcode 9 Beta 4.
 
-= RubyMotion 4.19 =
 
+= RubyMotion 4.19 =
   * The toolchain has been upgraded to LLVM 3.9 for all platforms.
   * [iOS, OSX, watchOS, tvOS] Added support for Xcode 9.
   * [iOS, OSX, watchOS, tvOS] Added support for iOS 11, tvOS 11, watchOS 4 and
@@ -1650,12 +1601,8 @@
     over 65536 methods, enable MultiDex by setting `app.multidex = true` in
     your Rakefile.
 
-<<<<<<< HEAD
-= RubyMotion 4.18 (New leadership) =
-=======
-= RubyMotion 4.18 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 4.18 (New leadership) =
   * Fixed some memory leaks in REPL.
   * Improve `rake spec' by removing redundant backtrace to find the failure
     specs ease.
@@ -1696,8 +1643,8 @@
   * [OSX] Fixed the template in OS X project to follow Xcode's template.
   * [Android] Fixed a problem which cannot use `rake ctags' in Android project.
 
-= RubyMotion 4.17 =
 
+= RubyMotion 4.17 =
   * Fixed some memory leaks in REPL.
   * [iOS] RubyMotion Starter now targets iOS 10.2.
   * [iOS] Got rid of warning message when building iOS extensions for the
@@ -1710,8 +1657,8 @@
     Thanks to Hwee-Boon Yar for the patch (pull request #248).
   * [Android] Improve build time slightly for emulator.
 
-= RubyMotion 4.16 =
 
+= RubyMotion 4.16 =
   * Introduced the `filter' option to `rake spec', which can be used to filter
     the specs that should be run using a regex.
     Example: rake spec filter="can retrieve users"
@@ -1766,8 +1713,8 @@
   * [Android] Fixed a compilation error if the same Ruby subclass of a Java
     class was defined in two different files.
 
-= RubyMotion 4.15 =
 
+= RubyMotion 4.15 =
   * `motion update` command will exit with code 0 if there is no update.
   * [iOS, OSX, watchOS, tvOS] Added better support for Xcode 8.1.
   * [iOS, OSX, watchOS, tvOS] Fixed a bug that could cause a deadlock if `eval'
@@ -1812,8 +1759,8 @@
     Android NDK toolchain by using `motion android-setup' command.
   * [Android] Added String#== method.
 
-= RubyMotion 4.14 =
 
+= RubyMotion 4.14 =
   * The toolchain has been upgraded to LLVM 3.8 for all platforms for Xcode 8.
   * [iOS, OSX, watchOS, tvOS] Added better support for Xcode 8.
   * [iOS, OSX, watchOS, tvOS] Added support for iOS 10.1, watchOS 3.1. You will
@@ -1838,8 +1785,8 @@
     the Android NDK toolchain by using `motion android-setup' command.
   * [Android] Dropped API 8 supporting.
 
-= RubyMotion 4.13 =
 
+= RubyMotion 4.13 =
   * [iOS, OSX, watchOS, tvOS] Added better support for Xcode 8 beta.
   * [iOS, OSX, watchOS, tvOS] Fixed a bug where ENV#inspect would always be an
     empty hash.
@@ -1875,8 +1822,8 @@
     member?, ===} to conform to the Ruby specifications.
   * [Android] Fixed a bug where Module#ancestors would cause a crash on Module.
 
-= RubyMotion 4.12 =
 
+= RubyMotion 4.12 =
   * [iOS, OSX, watchOS, tvOS] Added support for iOS 10, tvOS 10, watchOS 3
     and macOS 10.12 (experimental). You will need Xcode 8 (beta) for these.
   * [tvOS, watchOS] Got rid of warning messages when compiling Ruby files.
@@ -1969,8 +1916,8 @@
     logs programmatically.
   * [Android] Added including Comparable module into String and Time class.
 
-= RubyMotion 4.11 =
 
+= RubyMotion 4.11 =
   * The toolchain has been upgraded to LLVM 3.7 for all platforms.
   * [Android] Updated Android NDK to android-ndk-r11 version. Please update
     the Android NDK toolchain by using `motion android-setup' command.
@@ -1982,8 +1929,8 @@
     after updated rake to 11.0.1+.
     Thanks to Taylor for the patch (pull request #241).
 
-= RubyMotion 4.10 =
 
+= RubyMotion 4.10 =
   * [Android] RubyMotion Starter now targets API 23.
   * [Android] Added ScriptError, SyntaxError and StopIteration.
   * [Android] Added Fixnum#{**, div, fdiv, truncate, coerce, magnitude} methods.
@@ -2031,8 +1978,8 @@
   * Fixed a bug where objects would not be converted with #to_ary when yield.
   * Fixed various issues in Proc#call to conform to the Ruby specifications.
 
-= RubyMotion 4.9 =
 
+= RubyMotion 4.9 =
   * [Android] Added Comparable module.
   * [Android] Added Array#{-, &, |, <=>, to_ary, uniq, uniq!, cycle} methods.
   * [Android] Added Kernel#{enum_for, to_enum} methods.
@@ -2071,8 +2018,8 @@
   * [iOS, OSX, watchOS, tvOS] Fixed a memory leak in Object#instance_eval.
   * [iOS, OSX, watchOS, tvOS] Fixed a memory leak in Enumerable#zip.
 
-= RubyMotion 4.8 =
 
+= RubyMotion 4.8 =
   * [iOS, tvOS, watchOS] Added support for iOS 9.3, watchOS 2.2 and tvOS 9.2
     (beta). Latest Xcode is needed.
   * [iOS, OSX, tvOS, watchOS] Fixed an issue where certain vector types like
@@ -2088,8 +2035,8 @@
     or function returns a small structure (like NSRange or CGRect).
   * [android] Fixed a bug where armv5te binary would cause a crash for device.
 
-= RubyMotion 4.7 =
 
+= RubyMotion 4.7 =
   * Fixed a regression in where RubyMotion compiler causes a crash with
     `rake archive:distribution' if app has the unreachable local variables.
   * Fixed a bug in safe navigation operator which could not work as expected
@@ -2121,8 +2068,8 @@
   * [iOS, OSX, tvOS, watchOS] Improved creating Range literal performance.
     ~40% faster.
 
-= RubyMotion 4.6 =
 
+= RubyMotion 4.6 =
   * The toolchain has been upgraded to LLVM 3.6 for all platforms.
   * Introduced safe navigation operator `&.' as experimental.
   * Fixed a bug where operator assignment (like `obj[idx] ||= expr') returns
@@ -2166,8 +2113,8 @@
   * [tvOS] Fixed a bug where some UIKit constants (ex.
     `UILayoutPriorityDefaultHigh') could not be used from Ruby.
 
-= RubyMotion 4.5 =
 
+= RubyMotion 4.5 =
   * [tvOS] Added device deployment support. Apple TV apps can now be deployed
     on your Apple TV and also be submitted to the App Store.
   * [iOS] Added support for iOS 9.2 (beta). Latest Xcode is needed. RubyMotion
@@ -2194,8 +2141,8 @@
     it had multiple implementations and if the one that should have been called
     was accepting a Java string object.
 
-= RubyMotion 4.4 =
 
+= RubyMotion 4.4 =
   * [iOS, OSX] Improved the startup time of the compiler by 70% when using a
     deployment target much older than the SDK version, by only loading
     BridgeSupport files for that SDK version.
@@ -2218,8 +2165,8 @@
   * [Android] Fixed a bug where calling a block that has variadic arguments
     (ex. `lambda { |*a| ... }') could cause a runtime crash.
 
-= RubyMotion 4.3 =
 
+= RubyMotion 4.3 =
   * Dropped support for OSX 10.8 as development environment.  Please use OSX
     10.9 or higher.
   * [iOS, OSX] Solved an issue where certain constants in the enums
@@ -2237,16 +2184,16 @@
     variable that was created from the value of another local variable whose
     value changed after.
 
-= RubyMotion 4.2 =
 
+= RubyMotion 4.2 =
   * [iOS] Fixed a regression which cannot use UIInterfaceOrientationIsLandscape
     in iOS 8.2 or below.
   * [OSX] Make code signing to all embedded frameworks. Thanks to digitalMoksha
     for the patch (pull request #232).
   * [Android] Added support for API 23 final (and removed MNC version).
 
-= RubyMotion 4.1 =
 
+= RubyMotion 4.1 =
   * [tvOS] Added initial support for Apple TV (simulator only). To create a new
     tvOS app, run 'motion create mytvapp --template=tvos'. (Xcode 7.1 is
     required).
@@ -2277,8 +2224,8 @@
   * [Android] Added Symbol#{id2name, intern, empty?, match, <=>, casecmp,
     upcase, downcase, swapcase, capitalize, []}.
 
-= RubyMotion 4.0 =
 
+= RubyMotion 4.0 =
   * Support for watchOS 2.0 (beta). Apple Watch apps can now use native APIs.
     To create a new watchOS app run `motion create my_watch_app
     --template=ios-watch-app'. Then configure your iOS application by adding:
@@ -2303,8 +2250,8 @@
   * [Android] Fixed a regression which would trigger a crash when calling
     certain methods with a block.
 
-= RubyMotion 3.14 =
 
+= RubyMotion 3.14 =
   * [iOS] Improved iOS 9 ARM64 support.
   * [iOS] Fixed a problem where apps could not compile/link for iOS 9.
   * [iOS] Fixed a problem where `rake debug=1' could not launch the debugger
@@ -2317,8 +2264,8 @@
   * [Android] Fixed a bug where passing blocks to methods in a loop could
     overflow the Android VM with too many global references.
 
-= RubyMotion 3.13 =
 
+= RubyMotion 3.13 =
   * [iOS, OSX] Added support for iOS 9 and OS X 10.11 (experimental). To
     target these, you will need Xcode 7 (beta). NOTE: If you can't launch your
     app on a device running iOS 9, manually trust your certificate by going to
@@ -2337,8 +2284,8 @@
     precision.
   * [Android] Added Time#to_f.
 
-= RubyMotion 3.12 =
 
+= RubyMotion 3.12 =
   * [Android] Added support for Android M (experimental). To target it, set
     `app.api_version' to `MNC'.
   * [Android] Improved Object#raise to accept an exception class or instance.
@@ -2354,8 +2301,8 @@
   * [iOS, OSX] Improved compilation time for projects that have many source
     files. 2~ times faster.
 
-= RubyMotion 3.11 =
 
+= RubyMotion 3.11 =
   * [iOS] Fixed a bug which UIInterfaceOrientation would cause link error when
     specify iOS 8.2 or below as deployment target.
   * [iOS, OSX] Improved floating precision for 64-bit environment.
@@ -2392,8 +2339,8 @@
   * [Android] Fixed a bug where app.vendor_project with `:native' pointing to
     an array of paths for different architecture libraries would not work.
 
-= RubyMotion 3.10 =
 
+= RubyMotion 3.10 =
   * [Android] Fixed typo in android.rb template which breaks incremental builds.
     Thanks to Darin Wilson for the patch (pull request #210).
   * [Android] Fixed `rake {emulator,device} debug=1' for multi-arch projects.
@@ -2424,8 +2371,8 @@
   * [iOS, OSX] Fixed a bug where small structures with only float members could
     not be passed/returned in a 64-bit environment.
 
-= RubyMotion 3.9 =
 
+= RubyMotion 3.9 =
   * [Android] Projects now support multiple architectures. The `app.arch'
     variable is replaced by `app.archs' which takes an array of architectures.
     By default, we still build for arm 32-bit only.
@@ -2454,8 +2401,8 @@
   * [iOS, OSX] Fixed a bug where small structures with only float members could
     not be passed/returned in a 64-bit environment.
 
-= RubyMotion 3.8 =
 
+= RubyMotion 3.8 =
   * The toolchain has been upgrated to LLVM 3.5.
   * [Android] Added the `motion android-setup' command which downloads and
     installs the Android SDK and NDK automatically. Run the
@@ -2487,8 +2434,8 @@
   * [iOS, OSX] Fixed a rare case where gdb would be used instead of LLDB when
     running in debug mode.
 
-= RubyMotion 3.7 =
 
+= RubyMotion 3.7 =
   * Fixed a bug where the `motion' command would not work as expected if Ruby
     was installed with rbenv/RVM.
   * [iOS] Fix a bug where the build system would not detect the properties of
@@ -2532,8 +2479,8 @@
     a lot of test cases.
   * [Android] Fixed memory leaks when symbolicating an exception backtrace.
 
-= RubyMotion 3.6 =
 
+= RubyMotion 3.6 =
   * [iOS] Added support for iOS 8.3. Xcode 6.3 beta is required.
   * [iOS, OSX] Fixed a bug where the build would fail when using Xcode 5.
   * [iOS] Fixed a bug where WatchKit applications could not be launched with
@@ -2569,13 +2516,13 @@
     inner Java class would always return null/zero on Android 21 / ART,
     apparently due to a JNI regression (we added a workaround).
 
-= RubyMotion 3.5 =
 
+= RubyMotion 3.5 =
   * [iOS, OSX] Fixed a regression introduced by the previous release where the
     REPL would not work.
 
-= RubyMotion 3.4 =
 
+= RubyMotion 3.4 =
   * [iOS] Fixed a bug where iOS 8 extensions and their host app could not have
     different deployment_target values.
   * [iOS] Fixed a bug where an incorrect architecture would be chosen when
@@ -2614,8 +2561,8 @@
     helper method would only work as expected in the first spec file, and
     return nil in other spec files.
 
-= RubyMotion 3.3 =
 
+= RubyMotion 3.3 =
   * [iOS] Fixed a bug where a WatchKit application could be launched on an iOS
     8.1 simulator, which does not actually support WatchKit and would crash.
   * [iOS] Fixed a bug where the compiler would no longer emit proper DWARF
@@ -2655,8 +2602,8 @@
   * [Android] Fixed a bug where passing java.lang.String objects to Ruby
     String methods expecting String arguments would cause a runtime crash.
 
-= RubyMotion 3.2 =
 
+= RubyMotion 3.2 =
   * [iOS] Fixed a bug where RubyMotion frameworks could not be loaded due to
     required RubyMotion symbols being stripped from application/extension.
   * [iOS] Pick-up new certificates prefixed with `iOS` instead of `iPhone`.
@@ -2695,8 +2642,8 @@
   * [Android] Fixed the extra-packages argument to work with multiple packages.
     Thanks to Tom Carey for the patch (pull request #185).
 
-= RubyMotion 3.1 =
 
+= RubyMotion 3.1 =
   * [iOS] Fixed an API validation error when submitting an application that
     contains an extension.
   * [iOS] Fixed a regression that made it impossible to set environment
@@ -2711,8 +2658,8 @@
   * [Android] Added Bignum#integer?.
   * [Android] Fixed Fixnum#times to return an Enumerator when no block is given.
 
-= RubyMotion 3.0 =
 
+= RubyMotion 3.0 (Dec 2014) =
   * [Android] RubyMotion for Android support has been merged. Please refer to
     the pre-release NEWS file for past changes, and check out our developer
     guides for more information about this new platform support.
@@ -2778,8 +2725,8 @@
   * Fixed a bug where `rake profile' could not launch Instruments.app when
     being given the Instruments template with Xcode 6.2 Beta.
 
-= RubyMotion 2.38 =
 
+= RubyMotion 2.38 =
   * Optimized the app executable size when a project has too many Ruby source
     files, by removing unnecessary internal code. ~30-60% lighter.
   * Disabled armv7s support for iOS projects. If you want to add armv7s support
@@ -2811,8 +2758,8 @@
   * [OSX] Fixed a bug where BigDecimal#inspect would return invalid string on
     Yosemite.
 
-= RubyMotion 2.37 =
 
+= RubyMotion 2.37 =
   * Fixed a regression where Dispatch.once did not work correctly when it was
     invoked in some points.
   * Fixed a bug where the compiler would crash with an assertion message
@@ -2822,8 +2769,8 @@
   * Fixed a bug in the compiler when compiling for ARM64 where certain structs
     would not be properly available (such as NSDecimal).
 
-= RubyMotion 2.36 =
 
+= RubyMotion 2.36 =
   * Added ARM64 support (64-bit) for iOS. It is not yet enabled by default for
     applications that do not embed Frameworks or App Extensions. In order to
     enable it on other builds add the following line to your project's Rakefile:
@@ -2850,8 +2797,8 @@
     `motion changelog --pre' command.
   * Improved IO#.read performance to read from files. ~4 times faster.
 
-= RubyMotion 2.35 =
 
+= RubyMotion 2.35 =
   * Added support for iOS 8.1 (beta). You will need to install Xcode 6.1 GM
     Seed in order to target it.
   * Fixed a bug that could occur when the only available SDKs are newer than the
@@ -2864,8 +2811,8 @@
   * Fixed a bug where GLKit functions would trigger a crash when it will run
     app on iOS simulator.
 
-= RubyMotion 2.34 =
 
+= RubyMotion 2.34 =
   * All iOS and OS X versions of the runtime have been recompiled with Xcode 6.
   * [iOS] Add support for iPhone 6/6+ launch images. Unless explicitly
     specified, the Info.plist `UILaunchImages' key is populated from all PNG
@@ -2908,15 +2855,15 @@
     the methods since second argument.
   * Improved Regexp.last_match performance. ~20% faster.
 
-= RubyMotion 2.33 =
 
+= RubyMotion 2.33 =
   * Added support for installing pre-releases of RubyMotion. The
     `sudo motion update --pre' command will install a pre-release build in
     `/Library/RubyMotionPre'. Currently, the pre-release channel contains
     the first beta of RubyMotion for Android. Enjoy! ^_^
 
-= RubyMotion 2.32 =
 
+= RubyMotion 2.32 =
   * The iOS 8.0 and OS X 10.10 versions of the runtime have been recompiled
     with Xcode 6 Beta 6.
   * [iOS] Depracted rake options `device_family' and `retina' in favor of
@@ -2968,8 +2915,8 @@
   * Improved Object#method_missing performance. ~8 times faster.
   * Reduced the app boot time. ~40% faster.
 
-= RubyMotion 2.31 =
 
+= RubyMotion 2.31 =
   * The iOS 8.0 and OS X 10.10 versions of the runtime have been recompiled
     with Xcode 6 Beta 4.
   * Fixed a regression where a crash would happen when calling methods with
@@ -2989,8 +2936,8 @@
   * [iOS] Fixed a bug which user-defined debug commands would not be loaded
     in a remote/device debugging session.
 
-= RubyMotion 2.30 =
 
+= RubyMotion 2.30 =
   * The iOS 8.0 and OS X 10.10 versions of the runtime have been recompiled
     with Xcode 6 Beta 2.
   * Added the `device_name' parameter in order to select iOS 8 simulater device.
@@ -3037,15 +2984,15 @@
     specifying an older version OS X version for `app.deployment_target' when
     building on Yosemite.
 
-= RubyMotion 2.29 =
 
+= RubyMotion 2.29 =
   * Added support for Xcode 6 Beta 1 and iOS 8.0 / OS X Yosemite (10.10).
   * Fixed a bug where objects removed by Array#delete would not released.
   * Fixed a bug where a `not precompiled' error would happen when calling an
     alias to an Objective-C method with a C-level block argument.
 
-= RubyMotion 2.28 =
 
+= RubyMotion 2.28 =
   * Added support for `BigDecimal'. This class is implemented on top of
     `NSDecimalNumber' and currently adds all the `BigDecimal' operator methods.
     It can be passed to APIs that require `NSDecimalNumber *', `NSDecimal', and
@@ -3072,8 +3019,8 @@
     As an example, Object#{send, respond_to?} is now ~30% faster.
   * Improved String interpolation performance. ~10% faster.
 
-= RubyMotion 2.27 =
 
+= RubyMotion 2.27 =
   * Added support for localization `.strings' files which will be compiled as
     binary files. Thanks to Hwee-Boon Yar for the patch (pull request #154).
   * Added support for `NSLocalizedString' and friends. These are now available
@@ -3091,13 +3038,13 @@
   * Fixed a bug which shortcut for the method which was implemented on Ruby
     would not respond.
 
-= RubyMotion 2.26 =
 
+= RubyMotion 2.26 =
   * Fixed a regression introduced in the previous release that was causing a
     crash when checking if a class supports weak references on iOS 6.
 
-= RubyMotion 2.25 =
 
+= RubyMotion 2.25 =
   * Added support for Xcode 5.1 and iOS 7.1 final.
   * Added support for OSX 10.6 as deployment target (experimental).
   * Improved user feedback by printing a warning when overriding a protocol
@@ -3135,14 +3082,14 @@
   * Improved fine-grained lock performance. ~20% faster.
   * Improved memory management performance. ~25% faster.
 
-= RubyMotion 2.24 =
 
+= RubyMotion 2.24 =
   * Fixed a regression introduced by the last build where environments running
     versions of Ruby not handling source files as unicode by default would be
     broken due to the presence of a unicode character in one of the files.
 
-= RubyMotion 2.23 =
 
+= RubyMotion 2.23 =
   * Added support for objects conforming to the Subscripting interface
     (Objective-C Literals).
   * Fixed a bug with the `motion activate' CLI command. Thanks to Joffrey
@@ -3202,16 +3149,16 @@
     print the command to allow the user to symbolicate themselves instead.
   * Jim Weirich, 1956 - 2014. Without you I would not exist. Rest in Peace.
 
-= RubyMotion 2.22 =
 
+= RubyMotion 2.22 =
   * Fixed a bug with `vendor_project' and prebuilt libraries, where the
     BridgeSupport file could not be created, as the build directory wouldn’t
     exist yet.
   * Fixed a bug with `vendor_project' and Xcode projects, where the
     BridgeSupport files were being searched in the wrong location.
 
-= RubyMotion 2.21 =
 
+= RubyMotion 2.21 =
   * Added reference zeroing to `WeakRef' starting from iOS 5 and OS X 10.7. It
     will now raise an exception in case a message is sent after the reference
     has been deallocated. Use the `WeakRef#weakref_alive?' method to check if
@@ -3229,8 +3176,8 @@
     `vendor_project' were being shared across platform and not removed with
     `rake clean'.
 
-= RubyMotion 2.20 =
 
+= RubyMotion 2.20 =
   * Improved command-line interface, e.g. `$ motion create --help' will now no
     longer create an application called ‘--help’. This deprecates the interface
     for any command plugins and this will fully be removed with RubyMotion v3.
@@ -3294,8 +3241,8 @@
     not being cached for their private counterparts that are substituted at
     runtime in case the application is running in a sandbox.
 
-= RubyMotion 2.19 =
 
+= RubyMotion 2.19 =
   * [iOS] Fixed a regression related to the sim launcher changes for Xcode 5.1
     that broke `rake simulator debug=1`.
   * [OSX] Fixed a regression where #eval support was not working anymore.
@@ -3304,8 +3251,8 @@
   * Improved comparison iterator blocks that return Float objects.
     (Ex. Array#sort{|a,b| return float_object }). 2 times faster.
 
-= RubyMotion 2.18 =
 
+= RubyMotion 2.18 =
   * Added the `rake crashlog:device' task which will download crash reports
     generated by the app on the device, symbolicate them and save them on the
     local file system. The latest generated file will then be automatically
@@ -3342,8 +3289,8 @@
   * Improved the build system to compile as many spec files in parallel as
     possible.
 
-= RubyMotion 2.17 =
 
+= RubyMotion 2.17 =
   * Added the `Proc#weak!' method which transforms the strong reference to the
     block `self' variable into a weak reference. Once the `self' variable is
     weakly referenced there is no coming back to a strong reference. This
@@ -3387,8 +3334,8 @@
     whether code-signing should occur during `rake build:release'. The default
     value for this variable is `true'.
 
-= RubyMotion 2.16 =
 
+= RubyMotion 2.16 =
   * Fixed a heap overflow in floating point parsing (CVE-2013-4164).
   * Improved Time#{<, >, ==, eql?} performance. 9 times faster.
   * Improved the performance when NSDate objects are converted to Time objects.
@@ -3396,8 +3343,8 @@
   * Fixed regression in the REPL that made it impossible to use block local
     variables.
 
-= RubyMotion 2.15 =
 
+= RubyMotion 2.15 =
   * Added support for Xcode 5.1 Developer Preview and iOS 7.1 Beta.
   * Improved REPL to recognize Simulator at any scale and orientation. The only
     unsupported variant at this time is a Simulator window with scroll bars.
@@ -3430,12 +3377,12 @@
     when making use of the view test helpers. This can be done with normal
     `before` filters.
 
-= RubyMotion 2.14 =
 
+= RubyMotion 2.14 =
   * Really fix the inline function problem described in the previous update.
 
-= RubyMotion 2.13 =
 
+= RubyMotion 2.13 =
   * Fixed a bug where the methods which are defined as inline functions in
     iOS/OSX framework are not working properly.
   * Fixed a bug where using the mouse-over functionality in the REPL would
@@ -3447,8 +3394,8 @@
   * [iOS] Fixed a big where the running the REPL in 64-bit mode would result
     in an error related to the fact that the REPL library was i386-only.
 
-= RubyMotion 2.12 =
 
+= RubyMotion 2.12 =
   * Added support for OS X Mavericks (10.9). The toolchain is now fully usable
     on a Mavericks machine and can also be used to create Mavericks OS X apps.
   * Added `profile' rake tasks that launch builds through Instruments.app for
@@ -3480,8 +3427,8 @@
   * [iOS] Fixed a bug in the build system where it would generate invalid
     values for the UIDeviceFamily key (was using strings instead of integers).
 
-= RubyMotion 2.11 =
 
+= RubyMotion 2.11 =
   * Added the `rake clean:all' task which deletes all build object files
     (ex. those in ~/Library/RubyMotion/build). We recommend using that task
     before building an App Store submission.
@@ -3522,8 +3469,8 @@
   * [OSX] Fixed the wrong default settings of short cut key in menu. Thanks to
     Kazuhiro NISHIYAMA for the detective work.
 
-= RubyMotion 2.10 =
 
+= RubyMotion 2.10 =
   * Fixed a critical regression in the compiler where DWARF metadata would not
     be generated, causing .dSYM bundles to miss debugging symbols for Ruby
     code. The regression was introduced in 2.8. If you submitted apps built
@@ -3546,8 +3493,8 @@
   * [iOS] Fixed a bug where `rake device' would cause an Assertion Failed when
     `app.name' contains non-ascii characters.
 
-= RubyMotion 2.9 =
 
+= RubyMotion 2.9 =
   * Work around what is very likely a bug in the App Store verification
     process which would reject RubyMotion apps based on the fact that certain
     __builtin__xxx_chk() functions of the C runtime are marked as private API.
@@ -3555,8 +3502,8 @@
     to detect overflows. So far we know Apple rejects __strlcpy_chk() and
     __strlcat_chk() calls, so we removed them from the RubyMotion runtime.
 
-= RubyMotion 2.8 =
 
+= RubyMotion 2.8 =
   * Added support for iOS 7.0 GM and Xcode 5.0 GM.
   * Added support for building 64-bit iOS apps for iPhone 5S (experimental).
     The toolchain is now able to create x86_64 apps for the simulator and
@@ -3597,8 +3544,8 @@
     with `motion create [AppName] -template=[git repository path]'.
     Thanks to Jamon Holmgren for the patch (pull request #128).
 
-= RubyMotion 2.7 =
 
+= RubyMotion 2.7 =
   * Added support for iOS 7.0 Beta 6 and Xcode 5.0 DP 6.
   * Bundler is now integrated in new iOS and OS X projects. A default Gemfile
     will be created and the Rakefile file will require and initialize the
@@ -3676,8 +3623,8 @@
     true to enable codesigning for development builds. The default value for
     this variable is false, and only release builds are codesigned by default.
 
-= RubyMotion 2.6 =
 
+= RubyMotion 2.6 =
   * Added support for iOS 7.0 Beta 4 and Xcode 5.0 DP 4.
   * Improved the build system so that spec files are also compiled in parallel.
   * Fixed a bug in the cycle detector where it would try scanning objects that
@@ -3694,8 +3641,8 @@
   * [iOS] Fixed a bug in the REPL (iOS 7 only) where local variables would not
     be preserved.
 
-= RubyMotion 2.5 =
 
+= RubyMotion 2.5 =
   * The runtime is now able to detect and break basic circular references
     (when two objects point to themselves). Only objects created from Ruby
     classes (including Objective-C subclasses) are scanned. Cycle detection
@@ -3747,8 +3694,8 @@
   * [iOS] Fixed a bug where the NSUIntegerMax constant was not properly
     exposed when targeting iOS 7.x.
 
-= RubyMotion 2.4 =
 
+= RubyMotion 2.4 =
   * Added support for iOS 7.0 Beta 3 and Xcode 5.0 DP 3.
   * Fixed a long-standing set of memory-related bugs related to lambdas.
     Dynamic variables (shared by lambdas and calling scope) are now allocated
@@ -3784,8 +3731,8 @@
     If set, temporary files (such as LLVM bitcode and assembly) will not be
     removed from the build directory. To be used for debugging only.
 
-= RubyMotion 2.3 =
 
+= RubyMotion 2.3 =
   * Added support for iOS 7.0 Beta 2 and Xcode 5.0 DP 2.
   * Fixed a bug where the `RUBYMOTION_ENV' constant would not be defined before
     executing the main scope of .rb application files, resulting in a const
@@ -3823,8 +3770,8 @@
   * Added back `motion ri' support, which was incidentally removed due to a
     mistake on the build machine.
 
-= RubyMotion 2.2 =
 
+= RubyMotion 2.2 =
   * Added iOS 7.0 and OS X 10.9 support. Xcode 5.0 DP must be installed and
     activated as the default (using `xcode-select'). Xcode 4.x must remain in
     /Applications/Xcode.app as RubyMotion will still be using it, until we
@@ -3833,8 +3780,8 @@
     are Apple confidental and cannot be discussed online. Do not post code
     using the new APIs online.
 
-= RubyMotion 2.1 =
 
+= RubyMotion 2.1 =
   * Improved the `rake simulator' (iOS) and `rake run' (OSX) tasks to honor the
     `args' environment variable, which can be used to provide command-line
     arguments that will be passed to the app executable when launching.
@@ -3891,12 +3838,8 @@
   * Fixed a bug in detecting file dependencies where it will not detect file
     dependencies if the files contain nested constants.
 
-<<<<<<< HEAD
-= RubyMotion 2.0 (May 2013) =
-=======
-= RubyMotion 2.0 =
->>>>>>> 635f4a99178a365b1a6331cfb7c0ff5f0d8be588
 
+= RubyMotion 2.0 (May 2013) =
   * Added OSX development support. Use `motion create --template=osx' to create
     an OSX project. Use `rake -T' inside to see the available tasks and
     `rake config' to see the application config variables. RubyMotion OSX apps
@@ -3970,8 +3913,8 @@
                          |,4-  ) )-,_..;\ (  `'-'
                         '---''(_/--'  `-'\_)
 
-= RubyMotion 1.35 =
 
+= RubyMotion 1.35 =
   * Added support for string constants defined in 3rd-party header files using
     the macro system (ex. #define MyConstant @"SomeValue").
   * Added the `no_start' option to `rake device debug=1' to let the user attach
@@ -4002,15 +3945,15 @@
     properly be loaded.
   * Fixed a rare bug in the `super' dispatcher.
 
-= RubyMotion 1.34 =
 
+= RubyMotion 1.34 =
   * Fixed a regression where command + mouse-over would not work in the
     simulator window.
   * Fixed a regression in the build system where updated resource files would
     not be copied.
 
-= RubyMotion 1.33 =
 
+= RubyMotion 1.33 =
   * Fixed a bug where certain Float object would be losing 2-bits of precision.
     This was happening because the compiler optimized floats to fit in a 30-bit
     data structure. The runtime will now allocate 32-bit floats on the heap
@@ -4040,8 +3983,8 @@
   * Fixed a bug where the iOS simulator would be relaunched every time with
     `rake' command.
 
-= RubyMotion 1.32 =
 
+= RubyMotion 1.32 =
   * Added support for Xcode 4.6 and iOS 6.1 SDK.
   * Improved Array#hash performance.
   * Fixed a bug in IO#closed? and File#closed? where an exception wasn't raised
@@ -4050,8 +3993,8 @@
   * Fixed a bug in IO#close where it would close the wrong stream when opened
     in both read/write mode by IO#open.
 
-= RubyMotion 1.31 =
 
+= RubyMotion 1.31 =
   * Fixed a bug in Kernel.sprintf and NSDate.new which would cause a
     malloc_error_break error.
   * Added .sass-cache, .idea and app/pixate_code.rb to the default .gitignore
@@ -4075,8 +4018,8 @@
   * Improved the `tap' format of `rake spec' to print the number of each test
     instead of the total number, and also a better description.
 
-= RubyMotion 1.30 =
 
+= RubyMotion 1.30 =
   * Fixed a bug in the build system where it could not detect file dependencies
     using nested classes (ex. `module M; class C' and `class C2 < M::C').
   * Fixed a bug where MapKit annotation pins would disappear, because certain
@@ -4120,8 +4063,8 @@
     Hash.new, String#{split, count, delete, tr, tr!, tr_s, tr_s!}, Array#hash,
     Symbol#inspect.
 
-= RubyMotion 1.29 =
 
+= RubyMotion 1.29 =
   * Fixed a loading error with the ripper library when using Ruby 1.8.
   * Fixed a bug where the files that only contained constants were not detected
     by the file dependencies system.
@@ -4130,8 +4073,8 @@
   * Fixed a bug where detecting file dependencies would cause a build error
     when the list of files would not be given as a flat array.
 
-= RubyMotion 1.28 =
 
+= RubyMotion 1.28 =
   * Added the `motion ri' command to access to API information on command line.
     Ex: motion ri Dispatch::Queue#sync
   * Improved the build system to detect file dependencies automatically.
@@ -4169,8 +4112,8 @@
   * Fixed a bug when using TWTweetComposeViewController's methods on iOS 6.0
     below would trigger a crash at runtime.
 
-= RubyMotion 1.27 =
 
+= RubyMotion 1.27 =
   * Fixed a bug where NSDecimalNumber.decimalNumberWithDecimal would not work
     since 1.24 in development mode, because of a regression introduced after
     changing the default set of optimization passes.
@@ -4207,8 +4150,8 @@
   * Added .DS_Store, temporary files and project files into the default
     .gitignore file. Thanks to Mark Rickert and Eric Summers for the patch.
 
-= RubyMotion 1.26 =
 
+= RubyMotion 1.26 =
   * Fixed a bug in the build system where the Info.plist file would not be
     generated with the right DT* values when targetting iOS 6.0. This fixes
     AppStore submissions for apps made for the iPhone 5 new retina format.
@@ -4244,8 +4187,8 @@
   * Added the `spec:device' Rake task which will run the spec/test suite on the
     device via the debugger.
 
-= RubyMotion 1.25 =
 
+= RubyMotion 1.25 =
   * Fixed a bug when using Objective-C properties implemented using message
     forwarding (ex. GKMatchRequest's maxPlayers).
   * Fixed a bug in build system where the app.info_plist dictionary would not
@@ -4272,8 +4215,8 @@
   * Improved the Regexp class to support octal literals and '\[hH]' matchers.
   * Fixed Math.atan2 to follow the Ruby 1.9.3 specs when both arguments are 0.0.
 
-= RubyMotion 1.24 =
 
+= RubyMotion 1.24 =
   * Added support for the GM version of the iOS 6 SDK.
   * Added support for the iPhone5 architecture (armv7s).
   * Added new values for the `retina' option of `rake simulator': `3.5' (for
@@ -4337,8 +4280,8 @@
     NSMutableArray#sort_by!, NSMutableArray#select!, NSMutableArray#keep_if,
     NSMutableDictionary#select!, NSMutableDictionary#keep_if.
 
-= RubyMotion 1.23 =
 
+= RubyMotion 1.23 =
   * Fixed a bug where conformsToProtocol: would not return true on objects
     implemented in Ruby for protocols using required/optional sections (ex.
     AQGridView).
@@ -4373,13 +4316,13 @@
   * Fixed the build system to no longer re-build all .rb files in case the
     project's Rakefile changed.
 
-= RubyMotion 1.22 =
 
+= RubyMotion 1.22 =
   * This release adds support for iOS 4.3 and 5.0 back which wasn't present in
     1.21 due to a bug in the build system. Sorry folks!
 
-= RubyMotion 1.21 =
 
+= RubyMotion 1.21 =
   * Fixed a regression in the BridgeSupport generator in Mountain Lion where
     APIs dealing with CFTypeRef would accept or return Pointer objects instead
     of genuine objects.
@@ -4393,8 +4336,8 @@
   * Fixed a bug in the runtime where Objective-C properties implemented using
     message forwarding could not be called (ex. GKPlayer's alias or playerID).
 
-= RubyMotion 1.20 =
 
+= RubyMotion 1.20 =
   * Fixed a bug in the runtime where apps compiled for iOS5 calling into APIs
     using certain C typedefs would raise an exception in iOS6 because of an
     ABI incompatibility (introduced by clang's new enumerator_attributes
@@ -4421,13 +4364,13 @@
     iCarrousel class).
   * The iOS 6.0 version of the runtime has been recompiled for iOS 6.0 Beta 3.
 
-= RubyMotion 1.19 =
 
+= RubyMotion 1.19 =
   * Fixed a compiler bug (segfault) that could happen when compiling files
     using C opaque types.
 
-= RubyMotion 1.18 =
 
+= RubyMotion 1.18 =
   * Fixed a problem introduced in 1.16 that was causing objects returned from
     certain initializers to be autoreleased twice.
   * Added the `motiondir' project variable that can be used to specify the path
@@ -4440,13 +4383,13 @@
     reduce bugs. Ex: motion update --force-version=1.15
   * Fixed the iOS 6.0 Rakefile to use Xcode 4.5 DP2 by default.
 
-= RubyMotion 1.17 =
 
+= RubyMotion 1.17 =
   * Removed the Bundler support as it's apparently causing issues on certain
     environments. It will be added back once we figure out the edge cases.
 
-= RubyMotion 1.16 =
 
+= RubyMotion 1.16 =
   * Fixed a compiler bug in the way certain opaque types in the CoreMIDI
     framework would not properly be handled, causing crashes at runtime.
   * Fixed a regression in the build system where spec files in nested
@@ -4467,8 +4410,8 @@
     in the iPad simulator but using an iPhone simulator frame.
   * The iOS 6.0 version of the runtime has been recompiled for iOS 6.0 Beta 2.
 
-= RubyMotion 1.15 =
 
+= RubyMotion 1.15 =
   * Improved the spec framework to leverage UIAutomation's functionality. This
     lets you write functional tests on views and controllers by using the same
     event generators, but in pure Ruby (and not Javascript).
@@ -4492,8 +4435,8 @@
   * Fixed a bug in the build system where  files within symlinks inside of the
     resources directory would not be copied. Patch by Nick Quaranto.
 
-= RubyMotion 1.14 =
 
+= RubyMotion 1.14 =
   * Fixed a bug in the Struct class where certain instances would be released
     twice and triggering a malloc error.
   * Fixed a bug where aliasing a method generated by attr_* would trigger an
@@ -4514,8 +4457,8 @@
   * Introduced new project variables: short_version, background_modes and
     status_bar_style. Patch by Francis Chong.
 
-= RubyMotion 1.13 =
 
+= RubyMotion 1.13 =
   * Fixed a regression in `rake simulator' introduced by the last update.
     Also, the environment variable used to set the SDK target is renamed to
     `target' (ex. rake target=4.3).
@@ -4526,8 +4469,8 @@
     cleared when calling the gen_bridge_metadata tool, which would cause some
     issues later on. Patch by Satoshi Ebisawa.
 
-= RubyMotion 1.12 =
 
+= RubyMotion 1.12 =
   * Fixed a bug where sending an `init' message alone (without using `alloc'
     before) would lead to a memory crash. This was possible when overloading
     an initWith* method and doing `self.init' inside.
@@ -4556,8 +4499,8 @@
     by iOS and triggered when hitting the select button in a paste action.
     Thanks to Francis Chong for the detective work.
 
-= RubyMotion 1.11 =
 
+= RubyMotion 1.11 =
   * Fixed a bug where the runtime would not allow `nil' to be passed as a
     C-level block argument.
   * Fixed a bug where methods defined by attr_* would abort the program when
@@ -4569,8 +4512,8 @@
     Xcode 4.5 by typing the following command:
     $ cd /Library/RubyMotion/data/6.0; rake update
 
-= RubyMotion 1.10 =
 
+= RubyMotion 1.10 =
   * Fixed the build system to validate the content of the `app.icons' variable,
     since a wrong value may trigger an "unrecognized selector" exception in
     Application Loader when trying to submit the app to the App Store.
@@ -4606,8 +4549,8 @@
   * Fixed a bug in the simulator REPL where hitting the Home button would
     trigger an insane CPU usage.
 
-= RubyMotion 1.9 =
 
+= RubyMotion 1.9 =
   * Fixed a bug in the build system where the paths of vendored libraries
     would not be properly quoted and cause a build failure in case they
     contain space characters.
@@ -4626,16 +4569,16 @@
   * Fixed a bug in the compiler where compiling strings containing only null
     characters (ex. "\x00") would cause a crash.
 
-= RubyMotion 1.8 =
 
+= RubyMotion 1.8 =
   * Fixed a bug in the generation of BridgeSupport files for multiple headers
     directories.
   * When building vendored projects, unset environment variables that could
     potentially make the build to fail.
     https://github.com/HipByte/motion-cocoapods/issues/12
 
-= RubyMotion 1.7 =
 
+= RubyMotion 1.7 =
   * Fixed a bug in the compiler where the proper signature would not be used
     when defining informal protocol methods with CF types as arguments.
   * Fixed iOS constants to be looked up at demand (when being used) and not
@@ -4651,16 +4594,16 @@
   * Fixed a bug in the build system where vendored 3rd-party APIs dealing with
     types defined in iOS headers could not be used (ex: enums or structs).
 
-= RubyMotion 1.6 =
 
+= RubyMotion 1.6 =
   * Fixed a regression in the build system introduced by the previous update
     (when compiling .xib files).
   * Fixed the vendoring system to include all source code files. Merged patch
     from https://groups.google.com/d/msg/rubymotion/tPCxSMCA2f4/w2DIHFo2AVAJ
   * Fixed the REPL to not crash if you give it an empty expression.
 
-= RubyMotion 1.5 =
 
+= RubyMotion 1.5 =
   * Improved the REPL to support multi-line expressions.
   * Fixed a bug when compiling Core Data model files where the `momc' utility
     was not given absolute paths.
@@ -4676,8 +4619,8 @@
     properly handled later (because KVO inserts a new singleton class).
   * Fixed attr_writer to emit KVO notifications (will/didChangeValueForKey).
 
-= RubyMotion 1.4 =
 
+= RubyMotion 1.4 =
   * Added support for the compilation of .xcdatamodeld and .storyboard resource
     files. Thanks Ian Phillips, Andrew Vega and Michail Pishchagin.
   * Fixed a bug when the build system would fail in case the resources dir does
@@ -4693,8 +4636,8 @@
     Thanks Kristoph Cichocki-Romanov for the report.
   * Added support for the iOS 4.3 SDK.
 
-= RubyMotion 1.3 =
 
+= RubyMotion 1.3 =
   * Fixed a bug in format strings with width / precision modifiers.
   * Disabled the automatic loading of motion- gems.
   * Added support for the compilation of Interface Builder resource files.
@@ -4705,8 +4648,8 @@
     cause device deployments to fail.
   * Fixed a bug in NSArray#reject where the new array would not be returned.
 
-= RubyMotion 1.2 =
 
+= RubyMotion 1.2 =
   * Fixed a couple bugs in the project vendoring code that would be triggered
     when using the motion-cocoapods gem. The fixes were merged from the
     https://github.com/HipByte/motion-cocoapods/issues/1 discussion.
@@ -4716,14 +4659,15 @@
     set as the default Xcode in the system yet.
   * Fixed a typo in the REPL help message (thanks Mike Clark).
 
-= RubyMotion 1.1 =
 
+= RubyMotion 1.1 =
   * Fixed `rake device' to print a human-readable error message in case the
     deployment might fail because another process is connected to the device.
   * Fixed a bug in `rake simulator' where view detection would not work on
     non-English desktops (error "Cannot locate the Simulator app").
     Make sure to exit the Simulator app after applying this update.
 
-= RubyMotion 1.0 =
 
+= RubyMotion 1.0 =
   * First release.
+

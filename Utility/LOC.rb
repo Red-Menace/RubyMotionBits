@@ -15,16 +15,14 @@
 def countLOC(extension, comment)
    comment = Array(comment)  # string or array, will be converted to regexp
    files = 0         # number of files
-   totalLines = 0
    totalLOC = 0      # total number of lines of code
    totalComments = 0 # total number of comment-only lines
    totalBlanks = 0   # total number of blank lines
 
    Dir.glob('./**/*.' + extension).sort.each do |item|
-      next if item.index('LOC.rb') # skip this file
-      next if item.index('/spec/') # skip files in the specification directory
-      # other items to skip
-
+      next if item.index('LOC.rb') ||  # skip this file
+              item.index('/spec/')     # skip files in the specification directory
+              # other items to skip
       files += 1
       loc, comments, blanks = 0, 0, 0
       blockComment = false  # flag for counting lines in a comment block

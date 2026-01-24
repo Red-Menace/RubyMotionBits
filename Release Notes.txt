@@ -1,3 +1,17 @@
+= RubyMotion 9.10 (Dec 2025) =
+  * [Xcode] Added support for Xcode 16.2.
+
+
+= RubyMotion 9.9 =
+  * [Xcode] Fixed issue with launching simulator in Xcode 16.1.
+
+
+= RubyMotion 9.8 =
+  * [Xcode] Added support for Xcode 16.1.
+
+
+= RubyMotion 9.7 =
+  * [Xcode] Added support for Xcode 16.0 GM.
 
 
 = RubyMotion 9.6 (Sep 2024) =
